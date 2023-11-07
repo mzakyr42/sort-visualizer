@@ -162,6 +162,102 @@ async function QuickSort(array, low, high, speed) {
   }
 }
 
+async function SelectionSort(array, speed) {
+  for (let i = 0; i < array.length - 1; i++) {
+    let min_idx = i;
+    for (let j = i + 1; j < array.length; j++) {
+      await change_bar_color(array, min_idx, "red", true);
+      await change_bar_color(array, j, "blue", true);
+      await sleep(speed)
+      if (array[j] < array[min_idx]) {
+        await change_bar_color(array, min_idx, "white", false);
+        min_idx = j;
+      }
+      await change_bar_color(array, j, "white", false);
+      await change_bar_color(array, min_idx, "red", true);
+    }
+    await change_bar_color(array, min_idx, "white", false);
+    await swap_bar(array, min_idx, i);
+    await swap(array, min_idx, i);
+    await change_bar_color(array, min_idx, "white", false);
+    await sleep(speed);
+  }
+}
+
+async function CocktailShakerSort(array, speed) {
+  do {
+    var swapped = false;
+    for (let i = 0; i < array.length - 1; i++) {
+      if (array[i] > array[i + 1]) {
+        await swap_bar(array, i, i+1);
+        await swap(array, i, i+1);
+        swapped = true;
+        await sleep(speed);
+      }
+    }
+    if (!swapped) break;
+    swapped = false;
+    for (let i = array.length - 1; i > 0; i--) {
+      if (array[i] > array[i + 1]) {
+        await swap_bar(array, i, i+1);
+        await swap(array, i, i+1);
+        swapped = true;
+        await sleep(speed);
+      }
+    }
+  } while (swapped);
+}
+
+async function OddEvenSort(array, speed) {
+  let sorted = false;
+  while (!sorted) {
+    sorted = true;
+    for (let i = 1; i < array.length - 1; i += 2) {
+      if (array[i] > array[i+1]) {
+        await swap_bar(array, i, i+1);
+        await swap(array, i, i+1);
+        sorted = false;
+        await sleep(speed);
+      }
+    }
+    for (let i = 0; i < array.length; i += 2) {
+      if (array[i] > array[i+1]) {
+        await swap_bar(array, i, i+1);
+        await swap(array, i, i+1);
+        sorted = false;
+        await sleep(speed);
+      }
+    }
+  }
+}
+
+async function CombSort(array, speed) {
+  let gap = array.length;
+  let shrink = 1.3;
+  let sorted = false;
+
+  while (!sorted) {
+    gap = Math.floor(gap / shrink);
+
+    if (gap <= 1) {
+      gap = 1
+      sorted = true;
+    }
+
+    let i = 0;
+    while (i + gap < array.length) {
+      if (array[i] > array[i+gap]) {
+        await swap_bar(array, i, i+gap);
+        await swap(array, i, i+gap);
+        sorted = false;
+        await sleep(speed);
+      }
+
+      i += 1;
+    }
+  }
+}
+
 //
 // EVENT LISTENER
 //
@@ -177,13 +273,14 @@ randomize_btn.addEventListener("click", function () {
 });
 
 sort_btn.addEventListener("click", function () {
-  let sorted_array;
   let sorting_alg = Number(document.querySelector(".algo-menu").value);
   let speed = Number(document.querySelector(".speed-menu").value);
 
-  if (sorting_alg == 1) sorted_array = BubbleSort(unsorted_array, speed);
-  if (sorting_alg == 2) sorted_array = InsertionSort(unsorted_array, speed);
-  if (sorting_alg == 3) sorted_array = QuickSort(unsorted_array, 0, unsorted_array.length - 1, speed);
-
-  console.log(sorted_array)
+  if (sorting_alg == 1) BubbleSort(unsorted_array, speed);
+  if (sorting_alg == 2) InsertionSort(unsorted_array, speed);
+  if (sorting_alg == 3) QuickSort(unsorted_array, 0, unsorted_array.length - 1, speed);
+  if (sorting_alg == 4) SelectionSort(unsorted_array, speed);
+  if (sorting_alg == 5) CocktailShakerSort(unsorted_array, speed);
+  if (sorting_alg == 6) OddEvenSort(unsorted_array, speed);
+  if (sorting_alg == 7) CombSort(unsorted_array, speed);
 });
