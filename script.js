@@ -6,14 +6,39 @@ let randomize_btn = document.getElementById("randomize_btn");
 let sort_btn = document.getElementById("sort_btn");
 let bar_container = document.getElementById("bar_container");
 
+let audio_ctx = null;
+
 let minRange = 1;
-let maxRange = 30;
+let maxRange = 50;
 let bars = 50;
 let unsorted_array = new Array(bars);
 
 //
 // HELPER
 //
+//
+
+function play_sound(freq) {
+  if (audio_ctx == null) {
+    audio_ctx = new (
+      AudioContext ||
+      webkitAudioContext ||
+      window.webkitAudioContext
+    )();
+  }
+  const duration = 0.1;
+  const oscillator = audio_ctx.createOscillator();
+  oscillator.frequency.value=freq;
+  oscillator.start();
+  oscillator.stop(audio_ctx.currentTime + duration);
+  const node = audio_ctx.createGain();
+  node.gain.value = 0.1;
+  node.gain.linearRampToValueAtTime(
+    0, audio_ctx.currentTime + duration
+  );
+  oscillator.connect(node);
+  node.connect(audio_ctx.destination);
+}
 
 function random_number(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -57,47 +82,84 @@ function swap_bar(array, i, j) {
       bars[k].style.backgroundColor = "white";
     }
   }
+  play_sound(array[i] * 10);
+  play_sound(array[j] * 10);
 }
 
-function change_bar_color(i, color) {
+function change_bar_color(array, i, color, playsound) {
   let bars = document.getElementsByClassName("bar");
   bars[i].style.backgroundColor = color;
+  if (playsound) play_sound(array[i] * 10);
+}
+
+async function partition(array, low, high, speed) {
+  let pivot = array[high];
+
+  let i = low - 1;
+
+  for (let j = low; j <= high - 1; j++) {
+    if (array[j] < pivot) {
+      i++;
+      await swap_bar(array, i, j);
+      await swap(array, i, j);
+      await sleep(speed);
+    }
+  }
+
+  await swap_bar(array, i + 1, high);
+  await swap(array, i + 1, high);
+  await sleep(speed);
+  return i + 1;
 }
 
 //
 // ALGORITHMS
 //
 
-async function SelectionSort(array) {
-  for (let i = 0; i < array.length; i++) {
-    let min = i;
-    for (let j = i + 1; j < array.length; j++) {
-      if (array[j] < array[min]) {
-        min = j;
-      }
-    }
-    if (min != i) {
-      await swap_bar(array, i, min);
-      await swap(array, i, min);
-    }
-    await sleep(100);
-  }
+async function InsertionSort(array, speed) {
+  let i, j, key;
 
-  return array;
+  i = 1;
+  while (i < array.length) {
+    j = i;
+    while (j > 0 && array[j-1] > array[j]) {
+      await swap_bar(array, j, j-1);
+      await swap(array, j, j-1);
+      await sleep(speed);
+      j = j - 1;
+    }
+    i = i + 1;
+  }
 }
 
-async function BubbleSort(array) {
+async function BubbleSort(array, speed) {
   do {
     var swapped = false;
     for (let i = 1; i < array.length; i++) {
+      // await change_bar_color(array, i-1, "red", true);
+      // await change_bar_color(array, i, "blue", true);
+      // await sleep(50);
       if (array[i-1] > array[i]) {
         await swap_bar(array, i-1, i);
         await swap(array, i-1, i);
         swapped = true;
-        await sleep(100);
+        await sleep(speed);
       }
     }
   } while (swapped);
+}
+
+async function QuickSort(array, low, high, speed) {
+  if (low < high) {
+    let piv = await partition(array, low, high, speed);
+
+    // await Promise.all([
+    //   QuickSort(array, low, piv - 1, speed),
+    //   QuickSort(array, piv + 1, high, speed),
+    // ]);
+    await QuickSort(array, low, piv - 1, speed);
+    await QuickSort(array, piv + 1, high, speed);
+  }
 }
 
 //
@@ -118,8 +180,9 @@ sort_btn.addEventListener("click", function () {
   let sorted_array;
   let sorting_alg = Number(document.querySelector(".algo-menu").value);
 
-  if (sorting_alg == 1) sorted_array = BubbleSort(unsorted_array);
-  if (sorting_alg == 2) sorted_array = SelectionSort(unsorted_array);
+  if (sorting_alg == 1) sorted_array = BubbleSort(unsorted_array, 50);
+  if (sorting_alg == 2) sorted_array = InsertionSort(unsorted_array, 50);
+  if (sorting_alg == 3) sorted_array = QuickSort(unsorted_array, 0, unsorted_array.length - 1, 50);
 
   console.log(sorted_array)
 });
