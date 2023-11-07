@@ -179,10 +179,11 @@ randomize_btn.addEventListener("click", function () {
 sort_btn.addEventListener("click", function () {
   let sorted_array;
   let sorting_alg = Number(document.querySelector(".algo-menu").value);
+  let speed = Number(document.querySelector(".speed-menu").value);
 
-  if (sorting_alg == 1) sorted_array = BubbleSort(unsorted_array, 50);
-  if (sorting_alg == 2) sorted_array = InsertionSort(unsorted_array, 50);
-  if (sorting_alg == 3) sorted_array = QuickSort(unsorted_array, 0, unsorted_array.length - 1, 50);
+  if (sorting_alg == 1) sorted_array = BubbleSort(unsorted_array, speed);
+  if (sorting_alg == 2) sorted_array = InsertionSort(unsorted_array, speed);
+  if (sorting_alg == 3) sorted_array = QuickSort(unsorted_array, 0, unsorted_array.length - 1, speed);
 
   console.log(sorted_array)
 });
