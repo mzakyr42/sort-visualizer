@@ -13,3 +13,5 @@ sorting algorithm that have been implemented are:
 5. Cocktail Shaker Sort
 6. Odd-Even Sort
 7. Comb Sort
+8. Shell Sort
+9. Merge Sort

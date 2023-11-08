@@ -10,8 +10,6 @@ let sound_multiplier = Number(document.querySelector(".sound-menu").value);
 
 let audio_ctx = null;
 
-let minRange = 1;
-let maxRange = 50;
 let bars = 100;
 let unsorted_array = new Array(bars);
 
@@ -105,6 +103,11 @@ function change_bar_color(array, i, color, playsound) {
   if (playsound) play_sound(array[i] * sound_multiplier);
 }
 
+function change_bar_height(i, height) {
+  let bars = document.getElementsByClassName("bar");
+  bars[i].style.height = height * 3.8 + "px";
+}
+
 async function partition(array, low, high, speed) {
   let pivot = array[high];
 
@@ -123,6 +126,62 @@ async function partition(array, low, high, speed) {
   await swap(array, i + 1, high);
   await sleep(speed);
   return i + 1;
+}
+
+async function merge(array, left, mid, right, speed) {
+  var n1 = mid - left + 1;
+  var n2 = right - mid;
+
+  var L = new Array(n1);
+  var R = new Array(n2);
+
+  for (var i = 0; i < n1; i++)
+    L[i] = array[left + i];
+  for (var j = 0; j < n2; j++)
+    R[j] = array[mid + 1 + j];
+
+  var i = 0;
+  var j = 0;
+  var k = left;
+
+  while (i < n1 && j < n2) {
+    if (L[i] <= R[j]) {
+      await change_bar_height(k, L[i]);
+      await change_bar_color(array, k, "red", true);
+      array[k] = L[i];
+      i++;
+      await sleep(speed);
+      await change_bar_color(array, k, "white", false);
+    } else {
+      await change_bar_height(k, R[j]);
+      await change_bar_color(array, k, "blue", true);
+      array[k] = R[j];
+      j++;
+      await sleep(speed);
+      await change_bar_color(array, k, "white", false);
+    }
+    k++;
+  }
+
+  while (i < n1) {
+    await change_bar_height(k, L[i]);
+    await change_bar_color(array, k, "red", true);
+    array[k] = L[i];
+    i++;
+    await sleep(speed);
+    await change_bar_color(array, k, "white", false);
+    k++;
+  }
+
+  while (j < n2) {
+    await change_bar_height(k, R[j]);
+    await change_bar_color(array, k, "blue", true);
+    array[k] = R[j];
+    j++;
+    await sleep(speed);
+    await change_bar_color(array, k, "white", false);
+    k++;
+  }
 }
 
 //
@@ -271,6 +330,32 @@ async function CombSort(array, speed) {
   }
 }
 
+async function ShellSort(array, speed) {
+  for (let gap = Math.floor(array.length/2); gap > 0; gap = Math.floor(gap/2)) {
+    for (let i = gap; i < array.length; i += 1) {
+      let temp = array[i];
+      for (j = i; j >= gap && array[j - gap] > temp; j -= gap) {
+        await swap_bar(array, j, j - gap);
+        await swap(array, j, j - gap);
+        await sleep(speed);
+      }
+      await change_bar_height(j, temp);
+      array[j] = temp;
+      await change_bar_color(array, i, "blue", true);
+      await change_bar_color(array, i, "white", false);
+    }
+  }
+}
+
+async function MergeSort(array, left, right, speed) {
+  if (left < right) {
+    let mid = parseInt((left + right) >> 1);
+    await MergeSort(array, left, mid, speed);
+    await MergeSort(array, mid+1, right, speed);
+    await merge(array, left, mid, right, speed);
+  }
+}
+
 //
 // EVENT LISTENER
 //
@@ -298,4 +383,6 @@ sort_btn.addEventListener("click", function () {
   if (sorting_alg == 5) CocktailShakerSort(unsorted_array, speed);
   if (sorting_alg == 6) OddEvenSort(unsorted_array, speed);
   if (sorting_alg == 7) CombSort(unsorted_array, speed);
+  if (sorting_alg == 8) ShellSort(unsorted_array, speed);
+  if (sorting_alg == 9) MergeSort(unsorted_array, 0, unsorted_array.length - 1, speed);
 });
