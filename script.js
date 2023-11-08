@@ -5,12 +5,14 @@
 let randomize_btn = document.getElementById("randomize_btn");
 let sort_btn = document.getElementById("sort_btn");
 let bar_container = document.getElementById("bar_container");
+let sound_time = Number(document.querySelector(".sound-time-menu").value);
+let sound_multiplier = Number(document.querySelector(".sound-menu").value);
 
 let audio_ctx = null;
 
 let minRange = 1;
 let maxRange = 50;
-let bars = 50;
+let bars = 100;
 let unsorted_array = new Array(bars);
 
 //
@@ -32,7 +34,7 @@ function play_sound(freq) {
   oscillator.start();
   oscillator.stop(audio_ctx.currentTime + duration);
   const node = audio_ctx.createGain();
-  node.gain.value = 0.1;
+  node.gain.value = sound_time;
   node.gain.linearRampToValueAtTime(
     0, audio_ctx.currentTime + duration
   );
@@ -50,7 +52,7 @@ function sleep(ms) {
 
 function initialize() {
   for (let i = 0; i < bars; i++) {
-    unsorted_array[i] = random_number(minRange, maxRange);
+    unsorted_array[i] = i;
   }
 }
 
@@ -59,10 +61,21 @@ function render_bars(array) {
   for (let i = 0; i < array.length; i++) {
     let bar = document.createElement("div");
     bar.classList.add("bar");
-    bar.style.height = array[i] * 10 + "px";
+    bar.style.height = array[i] * 3.8 + "px";
     bar_container.appendChild(bar);
   }
   // bar_container.style.transform = "rotate(180deg)";
+}
+
+function randomize_array(array) {
+  let current_index = array.length, random_index;
+
+  while (current_index > 0) {
+    random_index = random_number(0, array.length - 1);
+    current_index--;
+
+    swap(array, current_index, random_index);
+  }
 }
 
 function swap(array, i, j) {
@@ -73,23 +86,23 @@ function swap(array, i, j) {
 
 function swap_bar(array, i, j) {
   let bars = document.getElementsByClassName("bar");
-  bars[i].style.height = array[j] * 10 + "px";
+  bars[i].style.height = array[j] * 3.8 + "px";
   bars[i].style.backgroundColor = "red";
-  bars[j].style.height = array[i] * 10 + "px";
+  bars[j].style.height = array[i] * 3.8 + "px";
   bars[j].style.backgroundColor = "blue";
   for (let k = 0; k < bars.length; k++) {
     if (k !== i && k !== j) {
       bars[k].style.backgroundColor = "white";
     }
   }
-  play_sound(array[i] * 10);
-  play_sound(array[j] * 10);
+  play_sound(array[i] * sound_multiplier);
+  play_sound(array[j] * sound_multiplier);
 }
 
 function change_bar_color(array, i, color, playsound) {
   let bars = document.getElementsByClassName("bar");
   bars[i].style.backgroundColor = color;
-  if (playsound) play_sound(array[i] * 10);
+  if (playsound) play_sound(array[i] * sound_multiplier);
 }
 
 async function partition(array, low, high, speed) {
@@ -268,13 +281,15 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 randomize_btn.addEventListener("click", function () {
-  initialize();
+  randomize_array(unsorted_array);
   render_bars(unsorted_array);
 });
 
 sort_btn.addEventListener("click", function () {
   let sorting_alg = Number(document.querySelector(".algo-menu").value);
   let speed = Number(document.querySelector(".speed-menu").value);
+  sound_time = Number(document.querySelector(".sound-time-menu").value);
+  sound_multiplier = Number(document.querySelector(".sound-menu").value);
 
   if (sorting_alg == 1) BubbleSort(unsorted_array, speed);
   if (sorting_alg == 2) InsertionSort(unsorted_array, speed);

@@ -2,6 +2,9 @@
 
 sort-visualizer is a sorting algorithm visualizer written in html,css, and js.
 
+features:
+- multiple sorting algorithm can run
+
 sorting algorithm that have been implemented are:
 1. Bubble Sort
 2. Insertion Sort

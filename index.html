@@ -14,6 +14,7 @@
       <div class="button_container">
         <button id="randomize_btn">Randomize Array</button>
         <button id="sort_btn">Sort</button>
+        <span>sorting algorithm: </span>
         <select name="sorting algorithm" class="algo-menu">
           <option value="1" selected>Bubble Sort</option>
           <option value="2">Insertion Sort</option>
@@ -23,11 +24,36 @@
           <option value="6">Odd-Even Sort</option>
           <option value="7">Comb Sort</option>
         </select>
+        <span>speed: </span>
         <select name="speed (in ms)" class="speed-menu">
+          <option value="1">1 ms</option>
+          <option value="5">5 ms</option>
+          <option value="10">10 ms</option>
           <option value="50" selected>50 ms</option>
           <option value="100">100 ms</option>
           <option value="500">500 ms</option>
           <option value="1000">1 sec</option>
+        </select>
+        <span>sound play time: </span>
+        <select name="sound time" class="sound-time-menu">
+          <option value="0.01">0.01</option>
+          <option value="0.05">0.05</option>
+          <option value="0.1" selected>0.1</option>
+          <option value="0.5">0.5</option>
+        </select>
+        <span>sound multiplier: </span>
+        <select name="sound multiplier (the frequency is in hertz)" class="sound-menu">
+          <option value="1">times 1</option>
+          <option value="2">times 2</option>
+          <option value="3">times 3</option>
+          <option value="3.8">times 3.8</option>
+          <option value="4">times 4</option>
+          <option value="5">times 5</option>
+          <option value="6">times 6</option>
+          <option value="7">times 7</option>
+          <option value="8">times 8</option>
+          <option value="9">times 9</option>
+          <option value="10" selected>times 10</option>
         </select>
       </div>
 
