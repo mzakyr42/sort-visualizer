@@ -2,6 +2,7 @@
 // VARIABLES
 //
 
+let reverse_btn = document.getElementById("reverse_btn");
 let randomize_btn = document.getElementById("randomize_btn");
 let sort_btn = document.getElementById("sort_btn");
 let bar_container = document.getElementById("bar_container");
@@ -184,6 +185,54 @@ async function merge(array, left, mid, right, speed) {
   }
 }
 
+async function heapify(array, N, i, speed) {
+  var largest = i;
+  var l = 2 * i + 1;
+  var r = 2 * i + 2;
+
+  if (l < N && array[l] > array[largest]) {
+    await change_bar_color(array, l, "blue", true);
+    largest = l;
+    await sleep(speed);
+    await change_bar_color(array, l, "white", false);
+  }
+
+  if (r < N && array[r] > array[largest]) {
+    await change_bar_color(array, r, "blue", true);
+    largest = r;
+    await sleep(speed);
+    await change_bar_color(array, r, "white", false);
+  }
+
+  if (largest != i) {
+    await swap_bar(array, i, largest);
+    await swap(array, i, largest);
+    await sleep(speed);
+    await heapify(array, N, largest, speed);
+  }
+}
+
+async function flip(array, i, speed) {
+  let temp, start = 0;
+  while (start < i) {
+    await swap_bar(array, start, i);
+    await swap(array, start, i);
+    start++;
+    i--;
+    await sleep(speed);
+  }
+}
+
+function find_max(array, n) {
+  let mi, i;
+  for (mi = 0, i = 0; i < n; i++) {
+    if (array[i] > array[mi])
+      mi = i;
+  }
+
+  return mi;
+}
+
 //
 // ALGORITHMS
 //
@@ -246,7 +295,7 @@ async function SelectionSort(array, speed) {
         min_idx = j;
       }
       await change_bar_color(array, j, "white", false);
-      await change_bar_color(array, min_idx, "red", true);
+      await change_bar_color(array, min_idx, "red", false);
     }
     await change_bar_color(array, min_idx, "white", false);
     await swap_bar(array, min_idx, i);
@@ -356,6 +405,44 @@ async function MergeSort(array, left, right, speed) {
   }
 }
 
+async function StoogeSort(array, i, j, speed) {
+  if (array[i] > array[j]) {
+    await swap_bar(array, i, j);
+    await swap(array, i, j);
+    await sleep(speed);
+  }
+  if ((j - i + 1) > 2) {
+    let t = Math.floor((j - i + 1) / 3);
+    await StoogeSort(array, i, j - t, speed);
+    await StoogeSort(array, i + t, j, speed);
+    await StoogeSort(array, i, j - t, speed);
+  }
+}
+
+async function HeapSort(array, speed) {
+  for (let i = Math.floor(array.length / 2) - 1; i >= 0; i--) {
+    await heapify(array, array.length, i, speed);
+  }
+
+  for (let i = array.length - 1; i > 0; i--) {
+    await swap_bar(array, 0, i);
+    await swap(array, 0, i);
+    await sleep(speed);
+
+    await heapify(array, i, 0, speed);
+  }
+}
+
+async function PancakeSort(array, speed) {
+  for (let current_size = array.length; current_size > 1; current_size--) {
+    let mi = await find_max(array, current_size);
+    if (mi != current_size - 1) {
+      await flip(array, mi, speed);
+      await flip(array, current_size - 1, speed);
+    }
+  }
+}
+
 //
 // EVENT LISTENER
 //
@@ -369,6 +456,11 @@ randomize_btn.addEventListener("click", function () {
   randomize_array(unsorted_array);
   render_bars(unsorted_array);
 });
+
+reverse_btn.addEventListener("click", function () {
+  unsorted_array.reverse();
+  render_bars(unsorted_array);
+})
 
 sort_btn.addEventListener("click", function () {
   let sorting_alg = Number(document.querySelector(".algo-menu").value);
@@ -385,4 +477,7 @@ sort_btn.addEventListener("click", function () {
   if (sorting_alg == 7) CombSort(unsorted_array, speed);
   if (sorting_alg == 8) ShellSort(unsorted_array, speed);
   if (sorting_alg == 9) MergeSort(unsorted_array, 0, unsorted_array.length - 1, speed);
+  if (sorting_alg == 10) StoogeSort(unsorted_array, 0, unsorted_array.length - 1, speed);
+  if (sorting_alg == 11) HeapSort(unsorted_array, speed);
+  if (sorting_alg == 12) PancakeSort(unsorted_array, speed);
 });

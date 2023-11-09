@@ -15,3 +15,6 @@ sorting algorithm that have been implemented are:
 7. Comb Sort
 8. Shell Sort
 9. Merge Sort
+10. Stooge Sort
+11. Heap Sort
+12. Pancake Sort
