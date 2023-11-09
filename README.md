@@ -18,3 +18,4 @@ sorting algorithm that have been implemented are:
 10. Stooge Sort
 11. Heap Sort
 12. Pancake Sort
+13. Bogo Sort
