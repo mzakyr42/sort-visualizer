@@ -30,7 +30,7 @@ function sleep(ms) {
 
 function initialize() {
   for (let i = 0; i < bars; i++) {
-    unsorted_array[i] = random_number(min_index, max_index);
+    array[i] = random_number(min_index, max_index);
   }
 }
 
@@ -212,6 +212,22 @@ function find_max(array, n) {
   }
 
   return mi;
+}
+
+async function is_sorted_animation(array, speed) {
+  let sorted;
+  for (let i = 1; i < array.length; i++) {
+    await change_bar_color(array, i, "blue", true);
+    await change_bar_color(array, i - 1, "red", true);
+    if (array[i] < array[i-1]) {
+      sorted = false;
+    }
+    await sleep(speed);
+    await change_bar_color(array, i, "white", false);
+    await change_bar_color(array, i - 1, "white", false);
+  }
+  sorted = true;
+  return sorted;
 }
 
 function is_sorted(array) {

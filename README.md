@@ -19,3 +19,4 @@ sorting algorithm that have been implemented are:
 11. Heap Sort
 12. Pancake Sort
 13. Bogo Sort
+14. Gnome Sort

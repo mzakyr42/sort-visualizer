@@ -215,3 +215,23 @@ async function BogoSort(array, speed) {
     }
   }
 }
+
+async function GnomeSort(array, speed) {
+  let pos = 0;
+  await change_bar_color(array, pos, "blue", true);
+  await sleep(speed);
+  await change_bar_color(array, pos, "white", false);
+  while (pos < array.length) {
+    if (pos == 0 || array[pos] >= array[pos-1]) {
+      await change_bar_color(array, pos, "blue", true);
+      await sleep(speed);
+      await change_bar_color(array, pos, "white", false);
+      pos = pos + 1;
+    } else {
+      await swap_bar(array, pos, pos-1);
+      await swap(array, pos, pos-1);
+      pos = pos - 1;
+      await sleep(speed);
+    }
+  }
+}
