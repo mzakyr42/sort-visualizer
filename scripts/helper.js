@@ -64,6 +64,8 @@ function swap(array, i, j) {
   let temp = array[i];
   array[i] = array[j];
   array[j] = temp;
+  swaps++;
+  update_info_box();
 }
 
 function swap_bar(array, i, j) {
@@ -104,6 +106,8 @@ async function partition(array, low, high, speed) {
       await swap(array, i, j);
       await sleep(speed);
     }
+    comparisons++;
+    await update_info_box();
   }
 
   await swap_bar(array, i + 1, high);
@@ -144,6 +148,8 @@ async function merge(array, left, mid, right, speed) {
       await sleep(speed);
       await change_bar_color(array, k, "white", false);
     }
+    comparisons++;
+    await update_info_box();
     k++;
   }
 
@@ -156,6 +162,8 @@ async function merge(array, left, mid, right, speed) {
     await change_bar_color(array, k, "white", false);
     k++;
   }
+  comparisons++;
+  await update_info_box();
 
   while (j < n2) {
     await change_bar_height(k, R[j]);
@@ -166,6 +174,8 @@ async function merge(array, left, mid, right, speed) {
     await change_bar_color(array, k, "white", false);
     k++;
   }
+  comparisons++;
+  await update_info_box();
 }
 
 async function heapify(array, N, i, speed) {
@@ -179,6 +189,8 @@ async function heapify(array, N, i, speed) {
     await sleep(speed);
     await change_bar_color(array, l, "white", false);
   }
+  comparisons++;
+  await update_info_box();
 
   if (r < N && array[r] > array[largest]) {
     await change_bar_color(array, r, "blue", true);
@@ -186,6 +198,8 @@ async function heapify(array, N, i, speed) {
     await sleep(speed);
     await change_bar_color(array, r, "white", false);
   }
+  comparisons++;
+  await update_info_box();
 
   if (largest != i) {
     await swap_bar(array, i, largest);
@@ -211,9 +225,16 @@ function find_max(array, n) {
   for (mi = 0, i = 0; i < n; i++) {
     if (array[i] > array[mi])
       mi = i;
+    comparisons++;
+    update_info_box();
   }
 
   return mi;
+}
+
+function update_info_box() {
+  document.getElementById("comparisons").innerText = comparisons;
+  document.getElementById("swaps").innerText = swaps;
 }
 
 async function is_sorted_animation(array, speed) {
@@ -235,6 +256,8 @@ async function is_sorted_animation(array, speed) {
 function is_sorted(array) {
   for (let i = 1; i < array.length; i++)
     if (array[i] < array[i-1])
+      comparisons++;
+      update_info_box();
       return false;
   return true;
 }

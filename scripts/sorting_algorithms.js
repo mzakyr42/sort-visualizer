@@ -11,6 +11,8 @@ async function BubbleSort(array, speed, n=array.length) {
         swapped = true;
         await sleep(speed);
       }
+      comparisons++;
+      await update_info_box();
     }
   } while (swapped);
 }
@@ -25,6 +27,8 @@ async function InsertionSort(array, speed, left=0, right=array.length) {
       await swap_bar(array, j, j-1);
       await swap(array, j, j-1);
       await sleep(speed);
+      comparisons++;
+      await update_info_box();
       j = j - 1;
     }
     i = i + 1;
@@ -55,6 +59,8 @@ async function SelectionSort(array, speed, n=array.length) {
         await change_bar_color(array, min_idx, "white", false);
         min_idx = j;
       }
+      comparisons++;
+      await update_info_box();
       await change_bar_color(array, j, "white", false);
       await change_bar_color(array, min_idx, "red", false);
     }
@@ -101,6 +107,8 @@ async function OddEvenSort(array, speed, n=array.length) {
         sorted = false;
         await sleep(speed);
       }
+      comparisons++;
+      await update_info_box();
     }
     for (let i = 0; i < n; i += 2) {
       if (array[i] > array[i+1]) {
@@ -109,6 +117,8 @@ async function OddEvenSort(array, speed, n=array.length) {
         sorted = false;
         await sleep(speed);
       }
+      comparisons++;
+      await update_info_box();
     }
   }
 }
@@ -134,6 +144,8 @@ async function CombSort(array, speed, n=array.length) {
         sorted = false;
         await sleep(speed);
       }
+      comparisons++;
+      await update_info_box();
 
       i += 1;
     }
@@ -147,6 +159,8 @@ async function ShellSort(array, speed, n=array.length) {
       for (j = i; j >= gap && array[j - gap] > temp; j -= gap) {
         await swap_bar(array, j, j - gap);
         await swap(array, j, j - gap);
+        comparisons++;
+        await update_info_box();
         await sleep(speed);
       }
       await change_bar_height(j, temp);
@@ -171,6 +185,8 @@ async function StoogeSort(array, i, j, speed) {
   if (array[i] > array[j]) {
     await swap_bar(array, i, j);
     await swap(array, i, j);
+    comparisons++;
+    await update_info_box();
     await sleep(speed);
   }
   if ((j - i + 1) > 2) {
@@ -199,6 +215,8 @@ async function PancakeSort(array, speed, n=array.length) {
   for (let current_size = n; current_size > 1; current_size--) {
     let mi = await find_max(array, current_size);
     if (mi != current_size - 1) {
+      comparisons++;
+      await update_info_box();
       await flip(array, mi, speed);
       await flip(array, current_size - 1, speed);
     }
@@ -228,6 +246,8 @@ async function GnomeSort(array, speed, n=array.length) {
       await sleep(speed);
       await change_bar_color(array, pos, "white", false);
       pos = pos + 1;
+      comparisons++;
+      await update_info_box();
     } else {
       await swap_bar(array, pos, pos-1);
       await swap(array, pos, pos-1);

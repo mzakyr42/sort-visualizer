@@ -4,6 +4,7 @@ sort-visualizer is a sorting algorithm visualizer written in html,css, and js.
 
 features:
 - multiple sorting algorihtm can run
+- info of swaps and comparisons (i don't guarantee it is accurate)
 
 sorting algorithm that have been implemented are:
 1. Bubble Sort

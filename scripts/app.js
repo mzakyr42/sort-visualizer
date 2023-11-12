@@ -12,6 +12,8 @@ let max_index = 100;
 let audio_ctx = null;
 
 let bars = 100;
+let comparisons = 0;
+let swaps = 0;
 let array = new Array(bars);
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -20,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 size_menu.addEventListener("change", function () {
+  comparisons = 0;
+  swaps = 0;
   bars = Number(document.querySelector(".size-menu").value);
   array = new Array();
   initialize();
@@ -28,6 +32,8 @@ size_menu.addEventListener("change", function () {
 
 randomize_btn.addEventListener("click", function () {
   let speed = Number(document.querySelector(".speed-menu").value);
+  comparisons = 0;
+  swaps = 0;
 
   randomize_array(array, speed);
   render_bars(array);
@@ -41,6 +47,8 @@ reverse_btn.addEventListener("click", function () {
 sort_btn.addEventListener("click", async function () {
   let sorting_alg = Number(document.querySelector(".algo-menu").value);
   let speed = Number(document.querySelector(".speed-menu").value);
+  comparisons = 0;
+  swaps = 0;
   sound_time = Number(document.querySelector(".sound-time-menu").value);
   sound_multiplier = Number(document.querySelector(".sound-menu").value);
 

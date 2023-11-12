@@ -9,6 +9,10 @@
   <body>
     <div class="container">
       <h1>Sort visualizer</h1>
+      <div class="info_box">
+        <p>Comparisons: <span id="comparisons">0</span></p>
+        <p>Swaps: <span id="swaps">0</span></p>
+      </div>
       <div class="bar_container" id="bar_container"></div>
 
       <div class="button_container">
@@ -48,6 +52,9 @@
           <option value="80">80</option>
           <option value="90">90</option>
           <option value="100" selected>100</option>
+          <option value="200">200</option>
+          <option value="300">300</option>
+          <option value="500">500</option>
         </select>
         <span>speed: </span>
         <select name="speed (in ms)" class="speed-menu">
