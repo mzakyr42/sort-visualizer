@@ -1,23 +1,7 @@
-async function InsertionSort(array, speed) {
-  let i, j, key;
-
-  i = 1;
-  while (i < array.length) {
-    j = i;
-    while (j > 0 && array[j-1] > array[j]) {
-      await swap_bar(array, j, j-1);
-      await swap(array, j, j-1);
-      await sleep(speed);
-      j = j - 1;
-    }
-    i = i + 1;
-  }
-}
-
-async function BubbleSort(array, speed) {
+async function BubbleSort(array, speed, n=array.length) {
   do {
     var swapped = false;
-    for (let i = 1; i < array.length; i++) {
+    for (let i = 1; i < n; i++) {
       // await change_bar_color(array, i-1, "red", true);
       // await change_bar_color(array, i, "blue", true);
       // await sleep(50);
@@ -29,6 +13,22 @@ async function BubbleSort(array, speed) {
       }
     }
   } while (swapped);
+}
+
+async function InsertionSort(array, speed, left=0, right=array.length) {
+  let i, j, key;
+
+  i = left + 1;
+  while (i < right) {
+    j = i;
+    while (j > left && array[j-1] > array[j]) {
+      await swap_bar(array, j, j-1);
+      await swap(array, j, j-1);
+      await sleep(speed);
+      j = j - 1;
+    }
+    i = i + 1;
+  }
 }
 
 async function QuickSort(array, low, high, speed) {
@@ -44,10 +44,10 @@ async function QuickSort(array, low, high, speed) {
   }
 }
 
-async function SelectionSort(array, speed) {
-  for (let i = 0; i < array.length - 1; i++) {
+async function SelectionSort(array, speed, n=array.length) {
+  for (let i = 0; i < n - 1; i++) {
     let min_idx = i;
-    for (let j = i + 1; j < array.length; j++) {
+    for (let j = i + 1; j < n; j++) {
       await change_bar_color(array, min_idx, "red", true);
       await change_bar_color(array, j, "blue", true);
       await sleep(speed)
@@ -66,10 +66,10 @@ async function SelectionSort(array, speed) {
   }
 }
 
-async function CocktailShakerSort(array, speed) {
+async function CocktailShakerSort(array, speed, n=array.length) {
   do {
     var swapped = false;
-    for (let i = 0; i < array.length - 1; i++) {
+    for (let i = 0; i < n - 1; i++) {
       if (array[i] > array[i + 1]) {
         await swap_bar(array, i, i+1);
         await swap(array, i, i+1);
@@ -79,7 +79,7 @@ async function CocktailShakerSort(array, speed) {
     }
     if (!swapped) break;
     swapped = false;
-    for (let i = array.length - 1; i > 0; i--) {
+    for (let i = n - 1; i > 0; i--) {
       if (array[i] > array[i + 1]) {
         await swap_bar(array, i, i+1);
         await swap(array, i, i+1);
@@ -90,11 +90,11 @@ async function CocktailShakerSort(array, speed) {
   } while (swapped);
 }
 
-async function OddEvenSort(array, speed) {
+async function OddEvenSort(array, speed, n=array.length) {
   let sorted = false;
   while (!sorted) {
     sorted = true;
-    for (let i = 1; i < array.length - 1; i += 2) {
+    for (let i = 1; i < n - 1; i += 2) {
       if (array[i] > array[i+1]) {
         await swap_bar(array, i, i+1);
         await swap(array, i, i+1);
@@ -102,7 +102,7 @@ async function OddEvenSort(array, speed) {
         await sleep(speed);
       }
     }
-    for (let i = 0; i < array.length; i += 2) {
+    for (let i = 0; i < n; i += 2) {
       if (array[i] > array[i+1]) {
         await swap_bar(array, i, i+1);
         await swap(array, i, i+1);
@@ -113,8 +113,8 @@ async function OddEvenSort(array, speed) {
   }
 }
 
-async function CombSort(array, speed) {
-  let gap = array.length;
+async function CombSort(array, speed, n=array.length) {
+  let gap = n;
   let shrink = 1.3;
   let sorted = false;
 
@@ -127,7 +127,7 @@ async function CombSort(array, speed) {
     }
 
     let i = 0;
-    while (i + gap < array.length) {
+    while (i + gap < n) {
       if (array[i] > array[i+gap]) {
         await swap_bar(array, i, i+gap);
         await swap(array, i, i+gap);
@@ -140,9 +140,9 @@ async function CombSort(array, speed) {
   }
 }
 
-async function ShellSort(array, speed) {
-  for (let gap = Math.floor(array.length/2); gap > 0; gap = Math.floor(gap/2)) {
-    for (let i = gap; i < array.length; i += 1) {
+async function ShellSort(array, speed, n=array.length) {
+  for (let gap = Math.floor(n/2); gap > 0; gap = Math.floor(gap/2)) {
+    for (let i = gap; i < n; i += 1) {
       let temp = array[i];
       for (j = i; j >= gap && array[j - gap] > temp; j -= gap) {
         await swap_bar(array, j, j - gap);
@@ -152,6 +152,7 @@ async function ShellSort(array, speed) {
       await change_bar_height(j, temp);
       array[j] = temp;
       await change_bar_color(array, i, "blue", true);
+      // await sleep(speed);
       await change_bar_color(array, i, "white", false);
     }
   }
@@ -180,12 +181,12 @@ async function StoogeSort(array, i, j, speed) {
   }
 }
 
-async function HeapSort(array, speed) {
-  for (let i = Math.floor(array.length / 2) - 1; i >= 0; i--) {
-    await heapify(array, array.length, i, speed);
+async function HeapSort(array, speed, n=array.length) {
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+    await heapify(array, n, i, speed);
   }
 
-  for (let i = array.length - 1; i > 0; i--) {
+  for (let i = n - 1; i > 0; i--) {
     await swap_bar(array, 0, i);
     await swap(array, 0, i);
     await sleep(speed);
@@ -194,8 +195,8 @@ async function HeapSort(array, speed) {
   }
 }
 
-async function PancakeSort(array, speed) {
-  for (let current_size = array.length; current_size > 1; current_size--) {
+async function PancakeSort(array, speed, n=array.length) {
+  for (let current_size = n; current_size > 1; current_size--) {
     let mi = await find_max(array, current_size);
     if (mi != current_size - 1) {
       await flip(array, mi, speed);
@@ -204,10 +205,10 @@ async function PancakeSort(array, speed) {
   }
 }
 
-async function BogoSort(array, speed) {
-  var i, j = array.length;
+async function BogoSort(array, speed, n=array.length) {
+  var i, j = n;
   while (!is_sorted(array)) {
-    for (i = 0; i < array.length; i++) {
+    for (i = 0; i < n; i++) {
       var index = Math.floor(Math.random() * array.length);
       await swap_bar(array, j-i-1, index);
       await swap(array, j-i-1, index);
@@ -216,12 +217,12 @@ async function BogoSort(array, speed) {
   }
 }
 
-async function GnomeSort(array, speed) {
+async function GnomeSort(array, speed, n=array.length) {
   let pos = 0;
   await change_bar_color(array, pos, "blue", true);
   await sleep(speed);
   await change_bar_color(array, pos, "white", false);
-  while (pos < array.length) {
+  while (pos < n) {
     if (pos == 0 || array[pos] >= array[pos-1]) {
       await change_bar_color(array, pos, "blue", true);
       await sleep(speed);
@@ -232,6 +233,24 @@ async function GnomeSort(array, speed) {
       await swap(array, pos, pos-1);
       pos = pos - 1;
       await sleep(speed);
+    }
+  }
+}
+
+async function TimSort(array, speed, n=array.length) {
+  let min_run = min_run_length(MIN_MERGE);
+
+  for (let i = 0; i < n; i += min_run) {
+    await InsertionSort(array, speed, i, Math.min(
+      (i + MIN_MERGE /* - 1 */), (n /*- 1 */)));
+  }
+
+  for (let size = min_run; size < n; size = 2 * size) {
+    for (let left = 0; left < n; left += 2 * size) {
+      let mid = left + size - 1;
+      let right = Math.min((left + 2 * size - 1), (n - 1));
+
+      if (mid < right) await merge(array, left, mid, right, speed);
     }
   }
 }

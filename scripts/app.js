@@ -58,6 +58,7 @@ sort_btn.addEventListener("click", async function () {
   if (sorting_alg == 12) await PancakeSort(array, speed);
   if (sorting_alg == 13) await BogoSort(array, speed);
   if (sorting_alg == 14) await GnomeSort(array, speed);
+  if (sorting_alg == 15) await TimSort(array, speed);
 
   console.log(await is_sorted_animation(array, speed));
 });

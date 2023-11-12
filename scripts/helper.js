@@ -1,3 +1,5 @@
+const MIN_MERGE = 32;
+
 function play_sound(freq) {
   if (audio_ctx == null) {
     audio_ctx = new (
@@ -235,4 +237,16 @@ function is_sorted(array) {
     if (array[i] < array[i-1])
       return false;
   return true;
+}
+
+function min_run_length(n)
+{
+    
+    let r = 0;
+    while (n >= MIN_MERGE)
+    {
+        r |= (n & 1);
+        n >>= 1;
+    }
+    return n + r + 1;
 }

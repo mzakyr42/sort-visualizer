@@ -3,7 +3,7 @@
 sort-visualizer is a sorting algorithm visualizer written in html,css, and js.
 
 features:
-- multiple sorting algorithm can run
+- multiple sorting algorihtm can run
 
 sorting algorithm that have been implemented are:
 1. Bubble Sort
@@ -20,3 +20,4 @@ sorting algorithm that have been implemented are:
 12. Pancake Sort
 13. Bogo Sort
 14. Gnome Sort
+15. Tim Sort
