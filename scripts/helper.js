@@ -31,15 +31,15 @@ function sleep(ms) {
 }
 
 function initialize() {
-  for (let i = 0; i < bars; i++) {
+  for (var i = 0; i < bars; i++) {
     array[i] = random_number(min_index, max_index);
   }
 }
 
 function render_bars(array) {
   bar_container.innerHTML = "";
-  for (let i = 0; i < array.length; i++) {
-    let bar = document.createElement("div");
+  for (var i = 0; i < array.length; i++) {
+    var bar = document.createElement("div");
     bar.classList.add("bar");
     bar.style.height = array[i] * 3.8 + "px";
     bar_container.appendChild(bar);
@@ -48,7 +48,7 @@ function render_bars(array) {
 }
 
 async function randomize_array(array, speed) {
-  let current_index = array.length, random_index;
+  var current_index = array.length, random_index;
 
   while (current_index > 0) {
     random_index = random_number(0, array.length - 1);
@@ -61,7 +61,7 @@ async function randomize_array(array, speed) {
 }
 
 function swap(array, i, j) {
-  let temp = array[i];
+  var temp = array[i];
   array[i] = array[j];
   array[j] = temp;
   swaps++;
@@ -69,12 +69,12 @@ function swap(array, i, j) {
 }
 
 function swap_bar(array, i, j) {
-  let bars = document.getElementsByClassName("bar");
+  var bars = document.getElementsByClassName("bar");
   bars[i].style.height = array[j] * 3.8 + "px";
   bars[i].style.backgroundColor = "red";
   bars[j].style.height = array[i] * 3.8 + "px";
   bars[j].style.backgroundColor = "blue";
-  for (let k = 0; k < bars.length; k++) {
+  for (var k = 0; k < bars.length; k++) {
     if (k !== i && k !== j) {
       bars[k].style.backgroundColor = "white";
     }
@@ -84,22 +84,22 @@ function swap_bar(array, i, j) {
 }
 
 function change_bar_color(array, i, color, playsound) {
-  let bars = document.getElementsByClassName("bar");
+  var bars = document.getElementsByClassName("bar");
   bars[i].style.backgroundColor = color;
   if (playsound) play_sound(array[i] * sound_multiplier);
 }
 
 function change_bar_height(i, height) {
-  let bars = document.getElementsByClassName("bar");
+  var bars = document.getElementsByClassName("bar");
   bars[i].style.height = height * 3.8 + "px";
 }
 
 async function partition(array, low, high, speed) {
-  let pivot = array[high];
+  var pivot = array[high];
 
-  let i = low - 1;
+  var i = low - 1;
 
-  for (let j = low; j <= high - 1; j++) {
+  for (var j = low; j <= high - 1; j++) {
     if (array[j] < pivot) {
       i++;
       await swap_bar(array, i, j);
@@ -210,7 +210,7 @@ async function heapify(array, N, i, speed) {
 }
 
 async function flip(array, i, speed) {
-  let temp, start = 0;
+  var temp, start = 0;
   while (start < i) {
     await swap_bar(array, start, i);
     await swap(array, start, i);
@@ -221,7 +221,7 @@ async function flip(array, i, speed) {
 }
 
 function find_max(array, n) {
-  let mi, i;
+  var mi, i;
   for (mi = 0, i = 0; i < n; i++) {
     if (array[i] > array[mi])
       mi = i;
@@ -238,8 +238,8 @@ function update_info_box() {
 }
 
 async function is_sorted_animation(array, speed) {
-  let sorted;
-  for (let i = 1; i < array.length; i++) {
+  var sorted;
+  for (var i = 1; i < array.length; i++) {
     await change_bar_color(array, i, "blue", true);
     await change_bar_color(array, i - 1, "red", true);
     if (array[i] < array[i-1]) {
@@ -254,7 +254,7 @@ async function is_sorted_animation(array, speed) {
 }
 
 function is_sorted(array) {
-  for (let i = 1; i < array.length; i++)
+  for (var i = 1; i < array.length; i++)
     if (array[i] < array[i-1])
       comparisons++;
       update_info_box();
@@ -265,7 +265,7 @@ function is_sorted(array) {
 function min_run_length(n)
 {
     
-    let r = 0;
+    var r = 0;
     while (n >= MIN_MERGE)
     {
         r |= (n & 1);

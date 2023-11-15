@@ -1,20 +1,20 @@
-let reverse_btn = document.getElementById("reverse_btn");
-let randomize_btn = document.getElementById("randomize_btn");
-let sort_btn = document.getElementById("sort_btn");
-let bar_container = document.getElementById("bar_container");
-let sound_time = Number(document.querySelector(".sound-time-menu").value);
-let sound_multiplier = Number(document.querySelector(".sound-menu").value);
-let size_menu = document.querySelector(".size-menu");
+var reverse_btn = document.getElementById("reverse_btn");
+var randomize_btn = document.getElementById("randomize_btn");
+var sort_btn = document.getElementById("sort_btn");
+var bar_container = document.getElementById("bar_container");
+var sound_time = Number(document.querySelector(".sound-time-menu").value);
+var sound_multiplier = Number(document.querySelector(".sound-menu").value);
+var size_menu = document.querySelector(".size-menu");
 
-let min_index = 1;
-let max_index = 100;
+var min_index = 1;
+var max_index = 100;
 
-let audio_ctx = null;
+var audio_ctx = null;
 
-let bars = 100;
-let comparisons = 0;
-let swaps = 0;
-let array = new Array(bars);
+var bars = 100;
+var comparisons = 0;
+var swaps = 0;
+var array = new Array(bars);
 
 document.addEventListener("DOMContentLoaded", function () {
   initialize();
@@ -31,7 +31,7 @@ size_menu.addEventListener("change", function () {
 });
 
 randomize_btn.addEventListener("click", function () {
-  let speed = Number(document.querySelector(".speed-menu").value);
+  var speed = Number(document.querySelector(".speed-menu").value);
   comparisons = 0;
   swaps = 0;
 
@@ -45,8 +45,8 @@ reverse_btn.addEventListener("click", function () {
 })
 
 sort_btn.addEventListener("click", async function () {
-  let sorting_alg = Number(document.querySelector(".algo-menu").value);
-  let speed = Number(document.querySelector(".speed-menu").value);
+  var sorting_alg = Number(document.querySelector(".algo-menu").value);
+  var speed = Number(document.querySelector(".speed-menu").value);
   comparisons = 0;
   swaps = 0;
   sound_time = Number(document.querySelector(".sound-time-menu").value);

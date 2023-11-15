@@ -21,21 +21,35 @@
         <button id="sort_btn">Sort</button>
         <span>sorting algorithm: </span>
         <select name="sorting algorithm" class="algo-menu">
-          <option value="1" selected>Bubble Sort</option>
-          <option value="2">Insertion Sort</option>
-          <option value="3">Quick Sort</option>
-          <option value="4">Selection Sort</option>
-          <option value="5">Cocktail Shaker Sort</option>
-          <option value="6">Odd-Even Sort</option>
-          <option value="7">Comb Sort</option>
-          <option value="8">Shell Sort</option>
-          <option value="9">Merge Sort</option>
-          <option value="10">Stooge Sort</option>
-          <option value="11">Heap Sort</option>
-          <option value="12">Pancake Sort</option>
-          <option value="13">Bogo Sort</option>
-          <option value="14">Gnome Sort</option>
-          <option value="15">Tim Sort</option>
+          <optgroup label="Exchange Sorts">
+            <option value="1" selected>Bubble Sort</option>
+            <option value="3">Quick Sort</option>
+            <option value="5">Cocktail Shaker Sort</option>
+            <option value="6">Odd-Even Sort</option>
+            <option value="7">Comb Sort</option>
+            <option value="14">Gnome Sort</option>
+          </optgroup>
+          <optgroup label="Selection Sorts">
+            <option value="4">Selection Sort</option>
+            <option value="11">Heap Sort</option>
+          </optgroup>
+          <optgroup label="Insertion Sorts">
+            <option value="2">Insertion Sort</option>
+            <option value="8">Shell Sort</option>
+          </optgroup>
+          <optgroup label="Merge Sorts">
+            <option value="9">Merge Sort</option>
+          </optgroup>
+          <optgroup label="Impractical Sorts">
+            <option value="10">Stooge Sort</option>
+            <option value="13">Bogo Sort</option>
+          </optgroup>
+          <optgroup label="Hybrid Sorts">
+            <option value="15">Tim Sort</option>
+          </optgroup>
+          <optgroup label="Other Sorts">
+            <option value="12">Pancake Sort</option>
+          </optgroup>
         </select>
         <span>size: </span>
         <select name="amount of bars" class="size-menu">
