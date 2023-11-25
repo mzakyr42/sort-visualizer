@@ -14,7 +14,7 @@ function play_sound(freq) {
   oscillator.start();
   oscillator.stop(audio_ctx.currentTime + duration);
   const node = audio_ctx.createGain();
-  node.gain.value = sound_time;
+  node.gain.value = 0.1;
   node.gain.linearRampToValueAtTime(
     0, audio_ctx.currentTime + duration
   );
@@ -31,20 +31,22 @@ function sleep(ms) {
 }
 
 function initialize() {
-  for (var i = 0; i < bars; i++) {
-    array[i] = random_number(min_index, max_index);
+  for (var i = 0; i < values; i++) {
+    // array[i] = random_number(min_index, max_index);
+    array[i] = i+1;
   }
 }
 
-function render_bars(array) {
-  bar_container.innerHTML = "";
+function render_values(array) {
+  value_container.innerHTML = "";
   for (var i = 0; i < array.length; i++) {
-    var bar = document.createElement("div");
-    bar.classList.add("bar");
-    bar.style.height = array[i] * 3.8 + "px";
-    bar_container.appendChild(bar);
+    var value = document.createElement("div");
+    value.classList.add("value");
+    if (visualization == 1) { value.style.height = array[i] * size_factor + "px"; }
+    else if (visualization == 2) { value.style.marginTop = array[i] * size_factor + "px"; }
+    value_container.appendChild(value);
   }
-  // bar_container.style.transform = "rotate(180deg)";
+  // value_container.style.transform = "rotate(180deg)";
 }
 
 async function randomize_array(array, speed) {
@@ -54,7 +56,7 @@ async function randomize_array(array, speed) {
     random_index = random_number(0, array.length - 1);
     current_index--;
 
-    await swap_bar(array, current_index, random_index);
+    await swap_value(array, current_index, random_index);
     await swap(array, current_index, random_index);
     await sleep(speed);
   }
@@ -68,30 +70,33 @@ function swap(array, i, j) {
   update_info_box();
 }
 
-function swap_bar(array, i, j) {
-  var bars = document.getElementsByClassName("bar");
-  bars[i].style.height = array[j] * 3.8 + "px";
-  bars[i].style.backgroundColor = "red";
-  bars[j].style.height = array[i] * 3.8 + "px";
-  bars[j].style.backgroundColor = "blue";
-  for (var k = 0; k < bars.length; k++) {
+function swap_value(array, i, j) {
+  var values = document.getElementsByClassName("value");
+  if (visualization == 1) { values[i].style.height = array[j] * size_factor + "px"; }
+  else if (visualization == 2) { values[i].style.marginTop = array[j] * size_factor + "px"; }
+  values[i].style.backgroundColor = "red";
+  if (visualization == 1) values[j].style.height = array[i] * size_factor + "px";
+  else if (visualization == 2) { values[j].style.marginTop = array[i] * size_factor + "px"; }
+  values[j].style.backgroundColor = "blue";
+  for (var k = 0; k < values.length; k++) {
     if (k !== i && k !== j) {
-      bars[k].style.backgroundColor = "white";
+      values[k].style.backgroundColor = "white";
     }
   }
   play_sound(array[i] * sound_multiplier);
   play_sound(array[j] * sound_multiplier);
 }
 
-function change_bar_color(array, i, color, playsound) {
-  var bars = document.getElementsByClassName("bar");
-  bars[i].style.backgroundColor = color;
-  if (playsound) play_sound(array[i] * sound_multiplier);
+function change_value_color(array, i, color, playsound) {
+  var values = document.getElementsByClassName("value");
+  values[i].style.backgroundColor = color;
+  if (playsound) play_sound(parseInt(array[i]) * sound_multiplier);
 }
 
-function change_bar_height(i, height) {
-  var bars = document.getElementsByClassName("bar");
-  bars[i].style.height = height * 3.8 + "px";
+function change_value_height(i, height) {
+  var values = document.getElementsByClassName("value");
+  if (visualization == 1) { values[i].style.height = height * size_factor + "px"; }
+  else if (visualization == 2) { values[i].style.marginTop = height * size_factor + "px"; } 
 }
 
 async function partition(array, low, high, speed) {
@@ -102,7 +107,7 @@ async function partition(array, low, high, speed) {
   for (var j = low; j <= high - 1; j++) {
     if (array[j] < pivot) {
       i++;
-      await swap_bar(array, i, j);
+      await swap_value(array, i, j);
       await swap(array, i, j);
       await sleep(speed);
     }
@@ -110,7 +115,7 @@ async function partition(array, low, high, speed) {
     await update_info_box();
   }
 
-  await swap_bar(array, i + 1, high);
+  await swap_value(array, i + 1, high);
   await swap(array, i + 1, high);
   await sleep(speed);
   return i + 1;
@@ -134,19 +139,19 @@ async function merge(array, left, mid, right, speed) {
 
   while (i < n1 && j < n2) {
     if (L[i] <= R[j]) {
-      await change_bar_height(k, L[i]);
-      await change_bar_color(array, k, "red", true);
+      await change_value_height(k, L[i]);
+      await change_value_color(array, k, "red", true);
       array[k] = L[i];
       i++;
       await sleep(speed);
-      await change_bar_color(array, k, "white", false);
+      await change_value_color(array, k, "white", false);
     } else {
-      await change_bar_height(k, R[j]);
-      await change_bar_color(array, k, "blue", true);
+      await change_value_height(k, R[j]);
+      await change_value_color(array, k, "blue", true);
       array[k] = R[j];
       j++;
       await sleep(speed);
-      await change_bar_color(array, k, "white", false);
+      await change_value_color(array, k, "white", false);
     }
     comparisons++;
     await update_info_box();
@@ -154,24 +159,24 @@ async function merge(array, left, mid, right, speed) {
   }
 
   while (i < n1) {
-    await change_bar_height(k, L[i]);
-    await change_bar_color(array, k, "red", true);
+    await change_value_height(k, L[i]);
+    await change_value_color(array, k, "red", true);
     array[k] = L[i];
     i++;
     await sleep(speed);
-    await change_bar_color(array, k, "white", false);
+    await change_value_color(array, k, "white", false);
     k++;
   }
   comparisons++;
   await update_info_box();
 
   while (j < n2) {
-    await change_bar_height(k, R[j]);
-    await change_bar_color(array, k, "blue", true);
+    await change_value_height(k, R[j]);
+    await change_value_color(array, k, "blue", true);
     array[k] = R[j];
     j++;
     await sleep(speed);
-    await change_bar_color(array, k, "white", false);
+    await change_value_color(array, k, "white", false);
     k++;
   }
   comparisons++;
@@ -184,25 +189,25 @@ async function heapify(array, N, i, speed) {
   var r = 2 * i + 2;
 
   if (l < N && array[l] > array[largest]) {
-    await change_bar_color(array, l, "blue", true);
+    await change_value_color(array, l, "blue", true);
     largest = l;
     await sleep(speed);
-    await change_bar_color(array, l, "white", false);
+    await change_value_color(array, l, "white", false);
   }
   comparisons++;
   await update_info_box();
 
   if (r < N && array[r] > array[largest]) {
-    await change_bar_color(array, r, "blue", true);
+    await change_value_color(array, r, "blue", true);
     largest = r;
     await sleep(speed);
-    await change_bar_color(array, r, "white", false);
+    await change_value_color(array, r, "white", false);
   }
   comparisons++;
   await update_info_box();
 
   if (largest != i) {
-    await swap_bar(array, i, largest);
+    await swap_value(array, i, largest);
     await swap(array, i, largest);
     await sleep(speed);
     await heapify(array, N, largest, speed);
@@ -212,11 +217,29 @@ async function heapify(array, N, i, speed) {
 async function flip(array, i, speed) {
   var temp, start = 0;
   while (start < i) {
-    await swap_bar(array, start, i);
+    await swap_value(array, start, i);
     await swap(array, start, i);
     start++;
     i--;
     await sleep(speed);
+  }
+}
+
+async function bitonic_merge(array, low, center, direction, speed) {
+  if (center > 1) {
+    var k = await greatest_power_of_two_less_than(center);
+
+    for (let i = low; i < low + center - k; i++) {
+      if ((array[i] > array[i+k] && direction === true) || 
+        (array[i] < array[i+k] && direction === false)) {
+        await swap_value(array, i, i+k);
+        await swap(array, i, i+k);
+        await sleep(speed);
+      }
+    }
+
+    await bitonic_merge(array, low, k, direction, speed);
+    await bitonic_merge(array, low + k, center - k, direction, speed);
   }
 }
 
@@ -240,14 +263,14 @@ function update_info_box() {
 async function is_sorted_animation(array, speed) {
   var sorted;
   for (var i = 1; i < array.length; i++) {
-    await change_bar_color(array, i, "blue", true);
-    await change_bar_color(array, i - 1, "red", true);
+    await change_value_color(array, i, "blue", true);
+    await change_value_color(array, i - 1, "red", true);
     if (array[i] < array[i-1]) {
       sorted = false;
     }
     await sleep(speed);
-    await change_bar_color(array, i, "white", false);
-    await change_bar_color(array, i - 1, "white", false);
+    await change_value_color(array, i, "white", false);
+    await change_value_color(array, i - 1, "white", false);
   }
   sorted = true;
   return sorted;
@@ -272,4 +295,12 @@ function min_run_length(n)
         n >>= 1;
     }
     return n + r + 1;
+}
+
+function greatest_power_of_two_less_than(n) {
+  var k = 1;
+  while (k > 0 && k < n) {
+    k = k << 1;
+  }
+  return k >> 1;
 }

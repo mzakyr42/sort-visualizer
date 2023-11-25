@@ -1,10 +1,11 @@
 # sort-visualizer
 
-sort-visualizer is a sorting algorithm visualizer written in html,css, and js.
+sort-visualizer is a sorting algorithm visualizer written in html, css, and js.
 
 features:
 - multiple sorting algorihtm can run
 - info of swaps and comparisons (i don't guarantee it is accurate)
+- super ugly interface
 
 sorting algorithm that have been implemented are:
 1. Bubble Sort
@@ -22,3 +23,4 @@ sorting algorithm that have been implemented are:
 13. Bogo Sort
 14. Gnome Sort
 15. Tim Sort
+16. Bitonic Sort

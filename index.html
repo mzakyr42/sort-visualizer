@@ -13,13 +13,13 @@
         <p>Comparisons: <span id="comparisons">0</span></p>
         <p>Swaps: <span id="swaps">0</span></p>
       </div>
-      <div class="bar_container" id="bar_container"></div>
+      <div class="value_container" id="value_container"></div>
 
       <div class="button_container">
         <button id="reverse_btn">Reverse Array</button>
         <button id="randomize_btn">Randomize Array</button>
         <button id="sort_btn">Sort</button>
-        <span>sorting algorithm: </span>
+        <span>sorting algorithm:</span>
         <select name="sorting algorithm" class="algo-menu">
           <optgroup label="Exchange Sorts">
             <option value="1" selected>Bubble Sort</option>
@@ -40,19 +40,22 @@
           <optgroup label="Merge Sorts">
             <option value="9">Merge Sort</option>
           </optgroup>
-          <optgroup label="Impractical Sorts">
-            <option value="10">Stooge Sort</option>
-            <option value="13">Bogo Sort</option>
+          <optgroup label="Concurrent Sorts">
+            <option value="16">Bitonic Sort</option>
           </optgroup>
           <optgroup label="Hybrid Sorts">
             <option value="15">Tim Sort</option>
+          </optgroup>
+          <optgroup label="Impractical Sorts">
+            <option value="10">Stooge Sort</option>
+            <option value="13">Bogo Sort</option>
           </optgroup>
           <optgroup label="Other Sorts">
             <option value="12">Pancake Sort</option>
           </optgroup>
         </select>
-        <span>size: </span>
-        <select name="amount of bars" class="size-menu">
+        <span>size:</span>
+        <select name="amount of values" class="size-menu">
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="5">5</option>
@@ -70,7 +73,7 @@
           <option value="300">300</option>
           <option value="500">500</option>
         </select>
-        <span>speed: </span>
+        <span>speed:</span>
         <select name="speed (in ms)" class="speed-menu">
           <option value="1">1 ms</option>
           <option value="5">5 ms</option>
@@ -80,14 +83,14 @@
           <option value="500">500 ms</option>
           <option value="1000">1 sec</option>
         </select>
-        <span>sound play time: </span>
-        <select name="sound time" class="sound-time-menu">
-          <option value="0.01">0.01</option>
-          <option value="0.05">0.05</option>
-          <option value="0.1" selected>0.1</option>
-          <option value="0.5">0.5</option>
-        </select>
-        <span>sound multiplier: </span>
+        <!-- <span>sound play time:</span> -->
+        <!-- <select name="sound time" class="sound-time-menu"> -->
+        <!--   <option value="0.01">0.01</option> -->
+        <!--   <option value="0.05">0.05</option> -->
+        <!--   <option value="0.1" selected>0.1</option> -->
+        <!--   <option value="0.5">0.5</option> -->
+        <!-- </select> -->
+        <span>sound multiplier:</span>
         <select name="sound multiplier (the frequency is in hertz)" class="sound-menu">
           <option value="1">times 1</option>
           <option value="2">times 2</option>
@@ -100,6 +103,11 @@
           <option value="8">times 8</option>
           <option value="9">times 9</option>
           <option value="10" selected>times 10</option>
+        </select>
+        <span>visualizer:</span>
+        <select name="values visualization" class="visualizer-menu">
+          <option value="1" selected>lines</option>
+          <option value="2">points</option>
         </select>
       </div>
 

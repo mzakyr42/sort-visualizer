@@ -7,6 +7,19 @@
 body {
   background-color: #333333;
   color: #f3f3f3;
+  font-family: monospace;
+}
+
+select {
+  font-family: monospace;
+}
+
+button {
+  font-family: monospace;
+}
+
+.button_container * {
+  float: left;
 }
 
 .container {
@@ -37,7 +50,7 @@ body {
     margin: 0px 0;
 }
 
-.bar_container {
+.value_container {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -47,11 +60,17 @@ body {
   transform: rotateX(180deg);
 }
 
-.bar {
-  /* height: 100px; */
+/* .button_container * { */
+/*   margin: 0; */
+/*   padding: 0; */
+/* } */
+
+.value {
+  /* aspect-ratio: 1/1; */
+  height: 10px;
   width: 10px;
   /* border: 1px solid #000; */
-  flex: 0.5;
+  flex: 0.5 0.5;
   margin: 0 0;
   resize: horizontal;
   background-color: white;

@@ -1,14 +1,14 @@
-const SIZE_THRESHOLD = 16;
+const SIZE_THRESHOLD = 32;
 
 async function BubbleSort(array, speed, n=array.length) {
   do {
     var swapped = false;
     for (var i = 1; i < n; i++) {
-      // await change_bar_color(array, i-1, "red", true);
-      // await change_bar_color(array, i, "blue", true);
+      // await change_value_color(array, i-1, "red", true);
+      // await change_value_color(array, i, "blue", true);
       // await sleep(50);
       if (array[i-1] > array[i]) {
-        await swap_bar(array, i-1, i);
+        await swap_value(array, i-1, i);
         await swap(array, i-1, i);
         swapped = true;
         await sleep(speed);
@@ -26,7 +26,7 @@ async function InsertionSort(array, speed, left=0, right=array.length) {
   while (i < right) {
     j = i;
     while (j > left && array[j-1] > array[j]) {
-      await swap_bar(array, j, j-1);
+      await swap_value(array, j, j-1);
       await swap(array, j, j-1);
       await sleep(speed);
       comparisons++;
@@ -54,22 +54,22 @@ async function SelectionSort(array, speed, n=array.length) {
   for (var i = 0; i < n - 1; i++) {
     var min_idx = i;
     for (var j = i + 1; j < n; j++) {
-      await change_bar_color(array, min_idx, "red", true);
-      await change_bar_color(array, j, "blue", true);
+      await change_value_color(array, min_idx, "red", true);
+      await change_value_color(array, j, "blue", true);
       await sleep(speed)
       if (array[j] < array[min_idx]) {
-        await change_bar_color(array, min_idx, "white", false);
+        await change_value_color(array, min_idx, "white", false);
         min_idx = j;
       }
       comparisons++;
       await update_info_box();
-      await change_bar_color(array, j, "white", false);
-      await change_bar_color(array, min_idx, "red", false);
+      await change_value_color(array, j, "white", false);
+      await change_value_color(array, min_idx, "red", false);
     }
-    await change_bar_color(array, min_idx, "white", false);
-    await swap_bar(array, min_idx, i);
+    await change_value_color(array, min_idx, "white", false);
+    await swap_value(array, min_idx, i);
     await swap(array, min_idx, i);
-    await change_bar_color(array, min_idx, "white", false);
+    await change_value_color(array, min_idx, "white", false);
     await sleep(speed);
   }
 }
@@ -79,21 +79,29 @@ async function CocktailShakerSort(array, speed, n=array.length) {
     var swapped = false;
     for (var i = 0; i < n - 1; i++) {
       if (array[i] > array[i + 1]) {
-        await swap_bar(array, i, i+1);
+        comparisons++
+        await update_info_box();
+        await swap_value(array, i, i+1);
         await swap(array, i, i+1);
         swapped = true;
         await sleep(speed);
       }
+      comparisons++
+      await update_info_box();
     }
     if (!swapped) break;
     swapped = false;
     for (var i = n - 1; i > 0; i--) {
       if (array[i] > array[i + 1]) {
-        await swap_bar(array, i, i+1);
+        comparisons++
+        await update_info_box();
+        await swap_value(array, i, i+1);
         await swap(array, i, i+1);
         swapped = true;
         await sleep(speed);
       }
+      comparisons++
+      await update_info_box();
     }
   } while (swapped);
 }
@@ -104,7 +112,7 @@ async function OddEvenSort(array, speed, n=array.length) {
     sorted = true;
     for (var i = 1; i < n - 1; i += 2) {
       if (array[i] > array[i+1]) {
-        await swap_bar(array, i, i+1);
+        await swap_value(array, i, i+1);
         await swap(array, i, i+1);
         sorted = false;
         await sleep(speed);
@@ -114,7 +122,7 @@ async function OddEvenSort(array, speed, n=array.length) {
     }
     for (var i = 0; i < n; i += 2) {
       if (array[i] > array[i+1]) {
-        await swap_bar(array, i, i+1);
+        await swap_value(array, i, i+1);
         await swap(array, i, i+1);
         sorted = false;
         await sleep(speed);
@@ -141,7 +149,7 @@ async function CombSort(array, speed, n=array.length) {
     var i = 0;
     while (i + gap < n) {
       if (array[i] > array[i+gap]) {
-        await swap_bar(array, i, i+gap);
+        await swap_value(array, i, i+gap);
         await swap(array, i, i+gap);
         sorted = false;
         await sleep(speed);
@@ -159,17 +167,17 @@ async function ShellSort(array, speed, n=array.length) {
     for (var i = gap; i < n; i += 1) {
       var temp = array[i];
       for (j = i; j >= gap && array[j - gap] > temp; j -= gap) {
-        await swap_bar(array, j, j - gap);
+        await swap_value(array, j, j - gap);
         await swap(array, j, j - gap);
         comparisons++;
         await update_info_box();
         await sleep(speed);
       }
-      await change_bar_height(j, temp);
+      await change_value_height(j, temp);
       array[j] = temp;
-      await change_bar_color(array, i, "blue", true);
+      await change_value_color(array, i, "blue", true);
       // await sleep(speed);
-      await change_bar_color(array, i, "white", false);
+      await change_value_color(array, i, "white", false);
     }
   }
 }
@@ -185,7 +193,7 @@ async function MergeSort(array, left, right, speed) {
 
 async function StoogeSort(array, i, j, speed) {
   if (array[i] > array[j]) {
-    await swap_bar(array, i, j);
+    await swap_value(array, i, j);
     await swap(array, i, j);
     comparisons++;
     await update_info_box();
@@ -206,7 +214,7 @@ async function HeapSort(array, speed, low=0, high=array.length) {
   }
 
   for (var i = n - 1; i > 0; i--) {
-    await swap_bar(array, 0, i);
+    await swap_value(array, 0, i);
     await swap(array, 0, i);
     await sleep(speed);
 
@@ -223,6 +231,8 @@ async function PancakeSort(array, speed, n=array.length) {
       await flip(array, mi, speed);
       await flip(array, current_size - 1, speed);
     }
+    comparisons++;
+    await update_info_box();
   }
 }
 
@@ -231,7 +241,7 @@ async function BogoSort(array, speed, n=array.length) {
   while (!is_sorted(array)) {
     for (i = 0; i < n; i++) {
       var index = Math.floor(Math.random() * array.length);
-      await swap_bar(array, j-i-1, index);
+      await swap_value(array, j-i-1, index);
       await swap(array, j-i-1, index);
       await sleep(speed);
     }
@@ -240,19 +250,19 @@ async function BogoSort(array, speed, n=array.length) {
 
 async function GnomeSort(array, speed, n=array.length) {
   var pos = 0;
-  await change_bar_color(array, pos, "blue", true);
+  await change_value_color(array, pos, "blue", true);
   await sleep(speed);
-  await change_bar_color(array, pos, "white", false);
+  await change_value_color(array, pos, "white", false);
   while (pos < n) {
     if (pos == 0 || array[pos] >= array[pos-1]) {
-      await change_bar_color(array, pos, "blue", true);
+      await change_value_color(array, pos, "blue", true);
       await sleep(speed);
-      await change_bar_color(array, pos, "white", false);
+      await change_value_color(array, pos, "white", false);
       pos = pos + 1;
       comparisons++;
       await update_info_box();
     } else {
-      await swap_bar(array, pos, pos-1);
+      await swap_value(array, pos, pos-1);
       await swap(array, pos, pos-1);
       pos = pos - 1;
       await sleep(speed);
@@ -275,5 +285,15 @@ async function TimSort(array, speed, n=array.length) {
 
       if (mid < right) await merge(array, left, mid, right, speed);
     }
+  }
+}
+
+async function BitonicSort(array, low, center, direction, speed) {
+  if (center > 1) {
+    var k = await greatest_power_of_two_less_than(center);
+
+    await BitonicSort(array, low, k, !direction, speed);
+    await BitonicSort(array, low + k, center - k, direction, speed);
+    await bitonic_merge(array, low, center, direction, speed);
   }
 }
