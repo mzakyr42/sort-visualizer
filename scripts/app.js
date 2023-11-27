@@ -3,7 +3,7 @@ var randomize_btn = document.getElementById("randomize_btn");
 var sort_btn = document.getElementById("sort_btn");
 var value_container = document.getElementById("value_container");
 // var sound_time = Number(document.querySelector(".sound-time-menu").value);
-var sound_multiplier = Number(document.querySelector(".sound-menu").value);
+// var sound_multiplier = Number(document.querySelector(".sound-menu").value);
 var size_menu = document.querySelector(".size-menu");
 var visualizer_menu = document.querySelector(".visualizer-menu");
 
@@ -15,6 +15,7 @@ var audio_ctx = null;
 let visualization = 1;
 // 1. lines
 // 2. points
+// 3. colorfull lines/hsl lines
 
 var values = 100;
 var comparisons = 0;
@@ -78,7 +79,7 @@ sort_btn.addEventListener("click", async function () {
   comparisons = 0;
   swaps = 0;
   // sound_time = Number(document.querySelector(".sound-time-menu").value);
-  sound_multiplier = Number(document.querySelector(".sound-menu").value);
+  // sound_multiplier = Number(document.querySelector(".sound-menu").value);
   if (values <= 5) {
     size_factor = 100;
   } else if (values > 5 && values <= 100) {
@@ -121,6 +122,7 @@ sort_btn.addEventListener("click", async function () {
     case 14: await GnomeSort(array, speed); break;
     case 15: await TimSort(array, speed); break;
     case 16: await BitonicSort(array, 0, array.length, true, speed); break;
+    case 17: await CycleSort(array, speed); break;
     default: console.log('how do we get here?'); break;
   }
 });

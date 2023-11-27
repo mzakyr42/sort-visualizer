@@ -44,6 +44,10 @@ function render_values(array) {
     value.classList.add("value");
     if (visualization == 1) { value.style.height = array[i] * size_factor + "px"; }
     else if (visualization == 2) { value.style.marginTop = array[i] * size_factor + "px"; }
+    else if (visualization == 3) { 
+      value.style.height = array[i] * size_factor + "px";
+      value.style.backgroundColor = `hsl(${array[i]}, 100%, 50%)`;
+    }
     value_container.appendChild(value);
   }
   // value_container.style.transform = "rotate(180deg)";
@@ -72,31 +76,67 @@ function swap(array, i, j) {
 
 function swap_value(array, i, j) {
   var values = document.getElementsByClassName("value");
-  if (visualization == 1) { values[i].style.height = array[j] * size_factor + "px"; }
-  else if (visualization == 2) { values[i].style.marginTop = array[j] * size_factor + "px"; }
-  values[i].style.backgroundColor = "red";
-  if (visualization == 1) values[j].style.height = array[i] * size_factor + "px";
-  else if (visualization == 2) { values[j].style.marginTop = array[i] * size_factor + "px"; }
-  values[j].style.backgroundColor = "blue";
+  if (visualization == 1) {
+    values[i].style.height = array[j] * size_factor + "px";
+    values[i].style.backgroundColor = "red";
+  }
+  else if (visualization == 2) {
+    values[i].style.marginTop = array[j] * size_factor + "px";
+    values[i].style.backgroundColor = "red";
+  }
+  else if (visualization == 3) { 
+    values[i].style.height = array[j] * size_factor + "px";
+    values[i].style.backgroundColor = "white";
+  }
+  if (visualization == 1) {
+    values[j].style.height = array[i] * size_factor + "px";
+    values[j].style.backgroundColor = "blue";
+  }
+  else if (visualization == 2) {
+    values[j].style.marginTop = array[i] * size_factor + "px";
+    values[j].style.backgroundColor = "blue";
+  }
+  else if (visualization == 3) { 
+    values[j].style.height = array[i] * size_factor + "px";
+    values[j].style.backgroundColor = "white";
+  }
   for (var k = 0; k < values.length; k++) {
     if (k !== i && k !== j) {
-      values[k].style.backgroundColor = "white";
+      if (visualization == 1) { 
+        values[k].style.backgroundColor = "white";
+      } if (visualization == 3) {
+        values[k].style.height = array[k] * size_factor + "px";
+        values[k].style.backgroundColor = `hsl(${array[k]}, 100%, 50%)`;
+      }
+
+      // values[k].style.backgroundColor = `hsl(${array[k]}, 100%, 50%)`;
     }
   }
-  play_sound(array[i] * sound_multiplier);
-  play_sound(array[j] * sound_multiplier);
+  play_sound(array[i] * 10);
+  play_sound(array[j] * 10);
 }
 
 function change_value_color(array, i, color, playsound) {
   var values = document.getElementsByClassName("value");
-  values[i].style.backgroundColor = color;
-  if (playsound) play_sound(parseInt(array[i]) * sound_multiplier);
+  if (visualization == 1 || visualization == 2) values[i].style.backgroundColor = color;
+  else if (visualization == 3) {
+    if (color != "white") {
+      values[i].style.backgroundColor = "white";
+    } else if (color == "white") {
+      values[i].style.backgroundColor = `hsl(${array[i]}, 100%, 50%)`;
+    }
+  }
+  if (playsound) play_sound(parseInt(array[i]) * 10);
 }
 
 function change_value_height(i, height) {
   var values = document.getElementsByClassName("value");
   if (visualization == 1) { values[i].style.height = height * size_factor + "px"; }
   else if (visualization == 2) { values[i].style.marginTop = height * size_factor + "px"; } 
+  else if (visualization == 3) {
+    values[i].style.height = height * size_factor + "px";
+    values[i].style.backgroundColor = `hsl(${height}, 100%, 50%)`;
+  }
 }
 
 async function partition(array, low, high, speed) {

@@ -297,3 +297,87 @@ async function BitonicSort(array, low, center, direction, speed) {
     await bitonic_merge(array, low, center, direction, speed);
   }
 }
+
+async function CycleSort(array, speed, n=array.length) {
+  for (let cycle_start = 0; cycle_start < n - 1; cycle_start++) {
+    await change_value_color(array, cycle_start, "red", true);
+    var item = array[cycle_start];
+
+    let pos = cycle_start;
+
+    for (let i = cycle_start + 1; i < n; i++) {
+      if (array[i] < item) {
+        comparisons++;
+        await update_info_box();
+        pos += 1;
+        await change_value_color(array, pos, "blue", true);
+        await sleep(speed);
+        await change_value_color(array, pos, "white", true);
+      }
+    }
+
+    if (pos == cycle_start) {
+      comparisons++;
+      await update_info_box();
+      await sleep(speed);
+      await change_value_color(array, cycle_start, "white", false);
+      continue;
+    }
+
+    while (item == array[pos]) {
+      comparisons++;
+      await update_info_box();
+      pos += 1;
+      await change_value_color(array, pos, "blue", true);
+      await sleep(speed);
+      await change_value_color(array, pos, "white", true);
+    }
+
+    if (pos != cycle_start) {
+      let temp = item;
+      item = array[pos];
+      array[pos] = temp;
+      swaps++;
+      await update_info_box();
+      await change_value_height(pos, temp);
+      await sleep(speed);
+    }
+
+    while (pos != cycle_start) {
+      pos = cycle_start;
+      
+      for (let i = cycle_start + 1; i < n; i++) {
+        if (array[i] < item) {
+          comparisons++;
+          await update_info_box();
+          pos += 1;
+          await change_value_color(array, pos, "blue", true);
+          await sleep(speed);
+          await change_value_color(array, pos, "white", true);
+        }
+      }
+
+      while (item == array[pos]) {
+        comparisons++;
+        await update_info_box();
+        pos += 1;
+        await change_value_color(array, pos, "blue", true);
+        await sleep(speed);
+        await change_value_color(array, pos, "white", true);
+      }
+
+      if (item != array[pos]) {
+        let temp = item;
+        item = array[pos];
+        array[pos] = temp;
+        swaps++;
+        await update_info_box();
+        await change_value_height(pos, temp);
+        await change_value_height(cycle_start, array[pos]);
+        await sleep(speed);
+      }
+    }
+    await sleep(speed);
+    await change_value_color(array, cycle_start, "white", false);
+  }
+}
