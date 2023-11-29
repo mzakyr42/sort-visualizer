@@ -54,22 +54,22 @@ async function SelectionSort(array, speed, n=array.length) {
   for (var i = 0; i < n - 1; i++) {
     var min_idx = i;
     for (var j = i + 1; j < n; j++) {
-      await change_value_color(array, min_idx, "red", true);
-      await change_value_color(array, j, "blue", true);
+      await change_value_color(array, min_idx, "red");
+      await change_value_color(array, j, "blue");
       await sleep(speed)
       if (array[j] < array[min_idx]) {
-        await change_value_color(array, min_idx, "white", false);
+        await change_value_color(array, min_idx, "white");
         min_idx = j;
       }
       comparisons++;
       await update_info_box();
-      await change_value_color(array, j, "white", false);
-      await change_value_color(array, min_idx, "red", false);
+      await change_value_color(array, j, "white");
+      await change_value_color(array, min_idx, "red");
     }
-    await change_value_color(array, min_idx, "white", false);
+    await change_value_color(array, min_idx, "white");
     await swap_value(array, min_idx, i);
     await swap(array, min_idx, i);
-    await change_value_color(array, min_idx, "white", false);
+    await change_value_color(array, min_idx, "white");
     await sleep(speed);
   }
 }
@@ -175,9 +175,9 @@ async function ShellSort(array, speed, n=array.length) {
       }
       await change_value_height(j, temp);
       array[j] = temp;
-      await change_value_color(array, i, "blue", true);
+      await change_value_color(array, i, "blue");
       // await sleep(speed);
-      await change_value_color(array, i, "white", false);
+      await change_value_color(array, i, "white");
     }
   }
 }
@@ -250,14 +250,14 @@ async function BogoSort(array, speed, n=array.length) {
 
 async function GnomeSort(array, speed, n=array.length) {
   var pos = 0;
-  await change_value_color(array, pos, "blue", true);
+  await change_value_color(array, pos, "blue");
   await sleep(speed);
-  await change_value_color(array, pos, "white", false);
+  await change_value_color(array, pos, "white");
   while (pos < n) {
     if (pos == 0 || array[pos] >= array[pos-1]) {
-      await change_value_color(array, pos, "blue", true);
+      await change_value_color(array, pos, "blue");
       await sleep(speed);
-      await change_value_color(array, pos, "white", false);
+      await change_value_color(array, pos, "white");
       pos = pos + 1;
       comparisons++;
       await update_info_box();
@@ -300,7 +300,7 @@ async function BitonicSort(array, low, center, direction, speed) {
 
 async function CycleSort(array, speed, n=array.length) {
   for (let cycle_start = 0; cycle_start < n - 1; cycle_start++) {
-    await change_value_color(array, cycle_start, "red", true);
+    await change_value_color(array, cycle_start, "red");
     var item = array[cycle_start];
 
     let pos = cycle_start;
@@ -310,9 +310,9 @@ async function CycleSort(array, speed, n=array.length) {
         comparisons++;
         await update_info_box();
         pos += 1;
-        await change_value_color(array, pos, "blue", true);
+        await change_value_color(array, pos, "blue");
         await sleep(speed);
-        await change_value_color(array, pos, "white", true);
+        await change_value_color(array, pos, "white");
       }
     }
 
@@ -320,7 +320,7 @@ async function CycleSort(array, speed, n=array.length) {
       comparisons++;
       await update_info_box();
       await sleep(speed);
-      await change_value_color(array, cycle_start, "white", false);
+      await change_value_color(array, cycle_start, "white");
       continue;
     }
 
@@ -328,9 +328,9 @@ async function CycleSort(array, speed, n=array.length) {
       comparisons++;
       await update_info_box();
       pos += 1;
-      await change_value_color(array, pos, "blue", true);
+      await change_value_color(array, pos, "blue");
       await sleep(speed);
-      await change_value_color(array, pos, "white", true);
+      await change_value_color(array, pos, "white");
     }
 
     if (pos != cycle_start) {
@@ -351,9 +351,9 @@ async function CycleSort(array, speed, n=array.length) {
           comparisons++;
           await update_info_box();
           pos += 1;
-          await change_value_color(array, pos, "blue", true);
+          await change_value_color(array, pos, "blue");
           await sleep(speed);
-          await change_value_color(array, pos, "white", true);
+          await change_value_color(array, pos, "white");
         }
       }
 
@@ -361,9 +361,9 @@ async function CycleSort(array, speed, n=array.length) {
         comparisons++;
         await update_info_box();
         pos += 1;
-        await change_value_color(array, pos, "blue", true);
+        await change_value_color(array, pos, "blue");
         await sleep(speed);
-        await change_value_color(array, pos, "white", true);
+        await change_value_color(array, pos, "white");
       }
 
       if (item != array[pos]) {
@@ -378,6 +378,79 @@ async function CycleSort(array, speed, n=array.length) {
       }
     }
     await sleep(speed);
-    await change_value_color(array, cycle_start, "white", false);
+    await change_value_color(array, cycle_start, "white");
+  }
+}
+
+async function CountingSort(array, k, exp, speed, n=array.length) {
+  var count = new Array(k+1).fill(0);
+  var output = new Array(n).fill(0);
+
+  for (let i = 0; i < n; i++) {
+    var x = Math.floor(array[i] / exp) % (k+1);
+    count[x/* array[i] */]++;
+    await change_value_color(array, i, "red");
+    // await change_value_color(array, j, "blue", true);
+    await sleep(speed);
+    await change_value_color(array, i, "white");
+    // await change_value_color(array, j, "white", false);
+  }
+
+  for (let i = 1; i <= k; i++) {
+    count[i] += count[i - 1];
+    await change_value_color(array, i - 1, "red");
+    await sleep(speed);
+    await change_value_color(array, i - 1, "white");
+  }
+
+  for (let i = n - 1; i >= 0; i--) {
+    var x = Math.floor(array[i] / exp) % (k+1);
+    count[x/* array[i] */]--;
+    output[count[x/* array[i] */]] = array[i];
+    await change_value_color(array, i, "red");
+    // await change_value_color(array, j, "blue", true);
+    await sleep(speed);
+    await change_value_color(array, i, "white");
+    // await change_value_color(array, j, "white", false);
+  }
+
+  for (let i = 0; i < n; i++) {
+    array[i] = output[i];
+    await change_value_height(i, output[i]);
+    await change_value_color(array, i, "red");
+    await sleep(speed);
+    await change_value_color(array, i, "white");
+  }
+}
+
+async function RadixSort(array, speed, n=array.length) {
+  let m = Math.max(...array);
+  let base = 9; // 10
+
+  for (let exp = 1; Math.floor(m / exp) > 0; exp *= base+1) {
+    await CountingSort(array, base, exp, speed);
+  }
+}
+
+async function DiamondSort(array, start, stop, merge, speed) {
+  if (stop - start == 2) {
+    if (array[start] > array[stop - 1]) {
+      await swap_value(array, start, stop - 1);
+      await swap(array, start, stop - 1);
+      await sleep(speed);
+    }
+  } else if (stop - start >= 3) {
+    let div = (stop - start) / 4;
+    let mid = (stop - start) / 2 + start;
+
+    if (merge) {
+      await DiamondSort(array, start, parseInt(mid), true, speed);
+      await DiamondSort(array, parseInt(mid), stop, true, speed);
+    }
+
+    await DiamondSort(array, parseInt(div + start), parseInt((div * 3) + start), false, speed);
+    await DiamondSort(array, start, parseInt(mid), false, speed);
+    await DiamondSort(array, parseInt(mid), stop, false, speed);
+    await DiamondSort(array, parseInt(div + start), parseInt((div * 3) + start), false, speed);
   }
 }

@@ -1,5 +1,12 @@
 const MIN_MERGE = 32;
 
+let freq_min = 200;
+let freq_max = 600;
+
+function calculate_freq(i) {
+  return i / 100 * (freq_max - freq_min) + freq_min;
+}
+
 function play_sound(freq) {
   if (audio_ctx == null) {
     audio_ctx = new (
@@ -8,18 +15,22 @@ function play_sound(freq) {
       window.webkitAudioContext
     )();
   }
-  const duration = 0.1;
   const oscillator = audio_ctx.createOscillator();
+  oscillator.type = "square";
   oscillator.frequency.value=freq;
-  oscillator.start();
-  oscillator.stop(audio_ctx.currentTime + duration);
+  // oscillator.stop(audio_ctx.currentTime + duration);
   const node = audio_ctx.createGain();
-  node.gain.value = 0.1;
-  node.gain.linearRampToValueAtTime(
-    0, audio_ctx.currentTime + duration
-  );
-  oscillator.connect(node);
-  node.connect(audio_ctx.destination);
+  node.gain.value = 0.005;
+  // node.gain.linearRampToValueAtTime(
+    // 0, audio_ctx.currentTime + duration
+  // );
+  oscillator.connect(node).connect(audio_ctx.destination);
+  oscillator.start();
+  // node.connect(audio_ctx.destination);
+
+  setTimeout(function() {
+        oscillator.stop();
+  }, 50);
 }
 
 function random_number(min, max) {
@@ -74,35 +85,33 @@ function swap(array, i, j) {
   update_info_box();
 }
 
-function swap_value(array, i, j) {
+async function swap_value(array, i, j) {
   var values = document.getElementsByClassName("value");
-  if (visualization == 1) {
-    values[i].style.height = array[j] * size_factor + "px";
-    values[i].style.backgroundColor = "red";
-  }
-  else if (visualization == 2) {
-    values[i].style.marginTop = array[j] * size_factor + "px";
-    values[i].style.backgroundColor = "red";
-  }
-  else if (visualization == 3) { 
-    values[i].style.height = array[j] * size_factor + "px";
-    values[i].style.backgroundColor = "white";
-  }
-  if (visualization == 1) {
-    values[j].style.height = array[i] * size_factor + "px";
-    values[j].style.backgroundColor = "blue";
-  }
-  else if (visualization == 2) {
-    values[j].style.marginTop = array[i] * size_factor + "px";
-    values[j].style.backgroundColor = "blue";
-  }
-  else if (visualization == 3) { 
-    values[j].style.height = array[i] * size_factor + "px";
-    values[j].style.backgroundColor = "white";
+  switch (visualization) {
+    case 1:
+      values[i].style.height = array[j] * size_factor + "px";
+      values[i].style.backgroundColor = "red";
+      values[j].style.height = array[i] * size_factor + "px";
+      values[j].style.backgroundColor = "blue";
+      break;
+    case 2:
+      values[i].style.marginTop = array[j] * size_factor + "px";
+      values[i].style.backgroundColor = "red";
+      values[j].style.marginTop = array[i] * size_factor + "px";
+      values[j].style.backgroundColor = "blue";
+      break;
+    case 3:
+      values[i].style.height = array[j] * size_factor + "px";
+      values[i].style.backgroundColor = "white";
+      values[j].style.height = array[i] * size_factor + "px";
+      values[j].style.backgroundColor = "white";
+      break;
+    default:
+      break;
   }
   for (var k = 0; k < values.length; k++) {
     if (k !== i && k !== j) {
-      if (visualization == 1) { 
+      if (visualization == 1 || visualization == 2) { 
         values[k].style.backgroundColor = "white";
       } if (visualization == 3) {
         values[k].style.height = array[k] * size_factor + "px";
@@ -112,11 +121,12 @@ function swap_value(array, i, j) {
       // values[k].style.backgroundColor = `hsl(${array[k]}, 100%, 50%)`;
     }
   }
-  play_sound(array[i] * 10);
-  play_sound(array[j] * 10);
+
+  await play_sound(calculate_freq(array[i]));
+  await play_sound(calculate_freq(array[j]));
 }
 
-function change_value_color(array, i, color, playsound) {
+async function change_value_color(array, i, color) {
   var values = document.getElementsByClassName("value");
   if (visualization == 1 || visualization == 2) values[i].style.backgroundColor = color;
   else if (visualization == 3) {
@@ -126,7 +136,23 @@ function change_value_color(array, i, color, playsound) {
       values[i].style.backgroundColor = `hsl(${array[i]}, 100%, 50%)`;
     }
   }
-  if (playsound) play_sound(parseInt(array[i]) * 10);
+  switch (visualization) {
+    case 1 || 2:
+      values[i].style.backgroundColor = color;
+      break;
+    case 3:
+      if (color != "white") {
+        values[i].style.backgroundColor = "white";
+      } else if (color == "white") {
+        values[i].style.backgroundColor = `hsl(${array[i]}, 100%, 50%)`;
+      }
+      break;
+    default:
+      break;
+  }
+  if (color != "white") {
+    await play_sound(calculate_freq(array[i]));
+  }
 }
 
 function change_value_height(i, height) {
@@ -136,6 +162,15 @@ function change_value_height(i, height) {
   else if (visualization == 3) {
     values[i].style.height = height * size_factor + "px";
     values[i].style.backgroundColor = `hsl(${height}, 100%, 50%)`;
+  }
+  switch (visualization) {
+    case 1: values[i].style.height = height * size_factor + "px"; break;
+    case 2: values[i].style.marginTop = height * size_factor + "px"; break;
+    case 3:
+      values[i].style.height = height * size_factor + "px";
+      values[i].style.backgroundColor = `hsl(${height}, 100%, 50%)`;
+      break;
+    default: break;
   }
 }
 
@@ -180,18 +215,18 @@ async function merge(array, left, mid, right, speed) {
   while (i < n1 && j < n2) {
     if (L[i] <= R[j]) {
       await change_value_height(k, L[i]);
-      await change_value_color(array, k, "red", true);
+      await change_value_color(array, k, "red");
       array[k] = L[i];
       i++;
       await sleep(speed);
-      await change_value_color(array, k, "white", false);
+      await change_value_color(array, k, "white");
     } else {
       await change_value_height(k, R[j]);
-      await change_value_color(array, k, "blue", true);
+      await change_value_color(array, k, "blue");
       array[k] = R[j];
       j++;
       await sleep(speed);
-      await change_value_color(array, k, "white", false);
+      await change_value_color(array, k, "white");
     }
     comparisons++;
     await update_info_box();
@@ -200,11 +235,11 @@ async function merge(array, left, mid, right, speed) {
 
   while (i < n1) {
     await change_value_height(k, L[i]);
-    await change_value_color(array, k, "red", true);
+    await change_value_color(array, k, "red");
     array[k] = L[i];
     i++;
     await sleep(speed);
-    await change_value_color(array, k, "white", false);
+    await change_value_color(array, k, "white");
     k++;
   }
   comparisons++;
@@ -212,11 +247,11 @@ async function merge(array, left, mid, right, speed) {
 
   while (j < n2) {
     await change_value_height(k, R[j]);
-    await change_value_color(array, k, "blue", true);
+    await change_value_color(array, k, "blue");
     array[k] = R[j];
     j++;
     await sleep(speed);
-    await change_value_color(array, k, "white", false);
+    await change_value_color(array, k, "white");
     k++;
   }
   comparisons++;
@@ -229,19 +264,19 @@ async function heapify(array, N, i, speed) {
   var r = 2 * i + 2;
 
   if (l < N && array[l] > array[largest]) {
-    await change_value_color(array, l, "blue", true);
+    await change_value_color(array, l, "blue");
     largest = l;
     await sleep(speed);
-    await change_value_color(array, l, "white", false);
+    await change_value_color(array, l, "white");
   }
   comparisons++;
   await update_info_box();
 
   if (r < N && array[r] > array[largest]) {
-    await change_value_color(array, r, "blue", true);
+    await change_value_color(array, r, "blue");
     largest = r;
     await sleep(speed);
-    await change_value_color(array, r, "white", false);
+    await change_value_color(array, r, "white");
   }
   comparisons++;
   await update_info_box();
@@ -298,22 +333,6 @@ function find_max(array, n) {
 function update_info_box() {
   document.getElementById("comparisons").innerText = comparisons;
   document.getElementById("swaps").innerText = swaps;
-}
-
-async function is_sorted_animation(array, speed) {
-  var sorted;
-  for (var i = 1; i < array.length; i++) {
-    await change_value_color(array, i, "blue", true);
-    await change_value_color(array, i - 1, "red", true);
-    if (array[i] < array[i-1]) {
-      sorted = false;
-    }
-    await sleep(speed);
-    await change_value_color(array, i, "white", false);
-    await change_value_color(array, i - 1, "white", false);
-  }
-  sorted = true;
-  return sorted;
 }
 
 function is_sorted(array) {

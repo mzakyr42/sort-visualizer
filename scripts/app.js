@@ -6,9 +6,7 @@ var value_container = document.getElementById("value_container");
 // var sound_multiplier = Number(document.querySelector(".sound-menu").value);
 var size_menu = document.querySelector(".size-menu");
 var visualizer_menu = document.querySelector(".visualizer-menu");
-
-var min_index = 1;
-var max_index = 100;
+var speed = Number(document.querySelector(".speed-menu").value);
 
 var audio_ctx = null;
 
@@ -17,18 +15,20 @@ let visualization = 1;
 // 2. points
 // 3. colorfull lines/hsl lines
 
-var values = 100;
+var values = 128;
 var comparisons = 0;
 var swaps = 0;
 var array = new Array(values);
 
 let size_factor;
-if (values <= 5) {
+if (values <= 8) {
   size_factor = 100;
-} else if (values > 5 && values <= 100) {
+} else if (values > 8 && values <= 128) {
   size_factor = 3.8;
-} else if (values > 300) {
+} else if (values > 128 && values <= 512) {
   size_factor = 1;
+} else if (values > 512) {
+  size_factor = 0.5;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -40,13 +40,16 @@ size_menu.addEventListener("change", function () {
   comparisons = 0;
   swaps = 0;
   values = Number(document.querySelector(".size-menu").value);
-  array = new Array();
-  if (values <= 5) {
+  array = new Array(values);
+  max = Math.max(...array);
+  if (values <= 8) {
     size_factor = 100;
-  } else if (values > 5 && values <= 100) {
+  } else if (values > 8 && values <= 128) {
     size_factor = 3.8;
-  } else if (values > 100) {
+  } else if (values > 128 && values <= 512) {
     size_factor = 1;
+  } else if (values > 512) {
+    size_factor = 0.5;
   }
 
   initialize();
@@ -75,17 +78,19 @@ reverse_btn.addEventListener("click", function () {
 
 sort_btn.addEventListener("click", async function () {
   var sorting_alg = Number(document.querySelector(".algo-menu").value);
-  var speed = Number(document.querySelector(".speed-menu").value);
+  speed = Number(document.querySelector(".speed-menu").value);
   comparisons = 0;
   swaps = 0;
   // sound_time = Number(document.querySelector(".sound-time-menu").value);
   // sound_multiplier = Number(document.querySelector(".sound-menu").value);
-  if (values <= 5) {
+  if (values < 8) {
     size_factor = 100;
-  } else if (values > 5 && values <= 100) {
+  } else if (values > 8 && values <= 128) {
     size_factor = 3.8;
-  } else if (values > 300) {
+  } else if (values > 128 && values <= 512) {
     size_factor = 1;
+  } else if (values > 512) {
+    size_factor = 0.5;
   }
 
   // if (sorting_alg == 1) await BubbleSort(array, speed);
@@ -109,7 +114,7 @@ sort_btn.addEventListener("click", async function () {
     case 1: await BubbleSort(array, speed); break;
     case 2: await InsertionSort(array, speed); break;
     case 3: await QuickSort(array, 0, array.length - 1, speed); break;
-    case 4: await SelectionSort(array, speed); break;
+    case 4: alert("Selection Sort Sound is broken so don't wear headset with full volume!"); await SelectionSort(array, speed); break;
     case 5: await CocktailShakerSort(array, speed); break;
     case 6: await OddEvenSort(array, speed); break;
     case 7: await CombSort(array, speed); break;
@@ -123,6 +128,9 @@ sort_btn.addEventListener("click", async function () {
     case 15: await TimSort(array, speed); break;
     case 16: await BitonicSort(array, 0, array.length, true, speed); break;
     case 17: await CycleSort(array, speed); break;
+    case 18: await CountingSort(array, Math.max(...array), 1, speed); break;
+    case 19: await RadixSort(array, speed); break;
+    case 20: await DiamondSort(array, 0, array.length, true, speed); break;
     default: console.log('how do we get here?'); break;
   }
 });
