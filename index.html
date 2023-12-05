@@ -9,16 +9,13 @@
   <body>
     <div class="container">
       <h1>Sort visualizer</h1>
-      <div class="info_box">
-        <p>Comparisons: <span id="comparisons">0</span></p>
-        <p>Swaps: <span id="swaps">0</span></p>
-      </div>
       <div class="value_container" id="value_container"></div>
 
       <div class="button_container">
         <button id="reverse_btn">Reverse Array</button>
         <button id="randomize_btn">Randomize Array</button>
         <button id="sort_btn">Sort</button>
+        <button id="initialize_btn">init</button>
         <span>sorting algorithm:</span>
         <select name="sorting algorithm" class="algo-menu">
           <optgroup label="Exchange Sorts">
@@ -28,6 +25,7 @@
             <option value="6">Odd-Even Sort</option>
             <option value="7">Comb Sort</option>
             <option value="14">Gnome Sort</option>
+            <option value="21">Circle Sort</option>
           </optgroup>
           <optgroup label="Selection Sorts">
             <option value="4">Selection Sort</option>
@@ -46,8 +44,14 @@
             <option value="19">Radix Sort</option>
           </optgroup>
           <optgroup label="Concurrent Sorts">
-            <option value="16">Bitonic Sort</option>
-            <option value="20">Diamond Sort</option>
+            <option value="16">Bitonic Sort Recursive</option>
+            <option value="20">Diamond Sort Recursive</option>
+            <option value="22">Bitonic Sort Iterative</option>
+            <option value="23">Diamond Sort Iterative</option>
+            <option value="24">Crease Sort</option>
+            <option value="25">Fold Sort</option>
+            <option value="26">Weave Sort Recursive</option>
+            <option value="27">Weave Sort Iterative</option>
           </optgroup>
           <optgroup label="Hybrid Sorts">
             <option value="15">Tim Sort</option>
@@ -55,6 +59,7 @@
           <optgroup label="Impractical Sorts">
             <option value="10">Stooge Sort</option>
             <option value="13">Bogo Sort</option>
+            <option value="28">Stalin Sort</option>
           </optgroup>
           <optgroup label="Other Sorts">
             <option value="12">Pancake Sort</option>
@@ -108,7 +113,9 @@
         <select name="values visualization" class="visualizer-menu">
           <option value="1" selected>lines</option>
           <option value="2">points</option>
-          <option value="3">hsl lines</option>
+          <option value="3">colorfull lines</option>
+          <option value="4">volume</option>
+          <option value="5">colorfull volume</option>
         </select>
       </div>
     </div>

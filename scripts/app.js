@@ -1,6 +1,7 @@
 var reverse_btn = document.getElementById("reverse_btn");
 var randomize_btn = document.getElementById("randomize_btn");
 var sort_btn = document.getElementById("sort_btn");
+var initialize_btn = document.getElementById("initialize_btn");
 var value_container = document.getElementById("value_container");
 // var sound_time = Number(document.querySelector(".sound-time-menu").value);
 // var sound_multiplier = Number(document.querySelector(".sound-menu").value);
@@ -131,6 +132,21 @@ sort_btn.addEventListener("click", async function () {
     case 18: await CountingSort(array, Math.max(...array), 1, speed); break;
     case 19: await RadixSort(array, speed); break;
     case 20: await DiamondSort(array, 0, array.length, true, speed); break;
+    case 21: await CircleSort(array, speed); break;
+    case 22: await BitonicSortIterative(array, speed); break;
+    case 23: await DiamondSortIterative(array, speed); break;
+    case 24: await CreaseSort(array, speed); break;
+    case 25: await FoldSort(array, speed); break;
+    case 26: await WeaveSortRecursive(array, speed); break;
+    case 27: await WeaveSortIterative(array, speed); break;
+    case 28: await StalinSort(array, speed); break;
     default: console.log('how do we get here?'); break;
   }
+});
+
+initialize_btn.addEventListener("click", function () {
+  array = new Array(values);
+
+  initialize();
+  render_values(array);
 });

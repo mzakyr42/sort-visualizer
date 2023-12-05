@@ -1,10 +1,10 @@
 const MIN_MERGE = 32;
 
-let freq_min = 200;
-let freq_max = 600;
+let freq_min = 120;
+let freq_max = 1200;
 
 function calculate_freq(i) {
-  return i / 100 * (freq_max - freq_min) + freq_min;
+  return i / array.length * (freq_max - freq_min) + freq_min;
 }
 
 function play_sound(freq) {
@@ -18,19 +18,19 @@ function play_sound(freq) {
   const oscillator = audio_ctx.createOscillator();
   oscillator.type = "square";
   oscillator.frequency.value=freq;
-  // oscillator.stop(audio_ctx.currentTime + duration);
   const node = audio_ctx.createGain();
   node.gain.value = 0.005;
-  // node.gain.linearRampToValueAtTime(
-    // 0, audio_ctx.currentTime + duration
-  // );
+  node.gain.linearRampToValueAtTime(
+    0, audio_ctx.currentTime + 0.1
+  );
   oscillator.connect(node).connect(audio_ctx.destination);
   oscillator.start();
+  oscillator.stop(audio_ctx.currentTime + 0.1);
   // node.connect(audio_ctx.destination);
 
-  setTimeout(function() {
-        oscillator.stop();
-  }, 50);
+  // setTimeout(function() {
+        // oscillator.stop();
+  // }, 50);
 }
 
 function random_number(min, max) {
@@ -44,20 +44,39 @@ function sleep(ms) {
 function initialize() {
   for (var i = 0; i < values; i++) {
     // array[i] = random_number(min_index, max_index);
+    // array[i] = Math.round((i+1) / 10) * 10;
     array[i] = i+1;
   }
 }
 
 function render_values(array) {
   value_container.innerHTML = "";
+  if (visualization == 1 || visualization == 2 || visualization == 3) { value_container.style.alignItems = "flex-start"; }
+  else if (visualization == 4 || visualization == 5) { value_container.style.alignItems = "center"; } 
   for (var i = 0; i < array.length; i++) {
     var value = document.createElement("div");
     value.classList.add("value");
-    if (visualization == 1) { value.style.height = array[i] * size_factor + "px"; }
-    else if (visualization == 2) { value.style.marginTop = array[i] * size_factor + "px"; }
-    else if (visualization == 3) { 
-      value.style.height = array[i] * size_factor + "px";
-      value.style.backgroundColor = `hsl(${array[i]}, 100%, 50%)`;
+    // if (visualization == 1) { value.style.height = array[i] * size_factor + "px"; }
+    // else if (visualization == 2) { value.style.marginTop = array[i] * size_factor + "px"; }
+    // else if (visualization == 3) { 
+    //   value.style.height = array[i] * size_factor + "px";
+    //   value.style.backgroundColor = `hsl(${array[i]}, 100%, 50%)`;
+    // } else if (visualization == 4) {
+    //   value_container.style.alignItems = "center";
+    //   value.style.height = array[i] * size_factor + "px";
+    // } else if (visualization == 5) {
+    //   value_container.style.alignItems = "center";
+    //   value.style.height = array[i] * size_factor + "px";
+    //   value.style.backgroundColor = `hsl(${array[i]}, 100%, 50%)`;
+    // }
+    switch (visualization) {
+      case 1: case 4: value.style.height = array[i] * size_factor + "px"; break;
+      case 2: value.style.marginTop = array[i] * size_factor + "px"; break;
+      case 3: case 5:
+        value.style.height = array[i] * size_factor + "px";
+        value.style.backgroundColor = `hsl(${array[i]}, 100%, 50%)`;
+        break;
+      default: console.log("hmmm"); break;
     }
     value_container.appendChild(value);
   }
@@ -81,14 +100,12 @@ function swap(array, i, j) {
   var temp = array[i];
   array[i] = array[j];
   array[j] = temp;
-  swaps++;
-  update_info_box();
 }
 
 async function swap_value(array, i, j) {
   var values = document.getElementsByClassName("value");
   switch (visualization) {
-    case 1:
+    case 1: case 4:
       values[i].style.height = array[j] * size_factor + "px";
       values[i].style.backgroundColor = "red";
       values[j].style.height = array[i] * size_factor + "px";
@@ -100,7 +117,7 @@ async function swap_value(array, i, j) {
       values[j].style.marginTop = array[i] * size_factor + "px";
       values[j].style.backgroundColor = "blue";
       break;
-    case 3:
+    case 3: case 5:
       values[i].style.height = array[j] * size_factor + "px";
       values[i].style.backgroundColor = "white";
       values[j].style.height = array[i] * size_factor + "px";
@@ -111,9 +128,9 @@ async function swap_value(array, i, j) {
   }
   for (var k = 0; k < values.length; k++) {
     if (k !== i && k !== j) {
-      if (visualization == 1 || visualization == 2) { 
+      if (visualization == 1 || visualization == 2 || visualization == 4) { 
         values[k].style.backgroundColor = "white";
-      } if (visualization == 3) {
+      } if (visualization == 3 || visualization == 5) {
         values[k].style.height = array[k] * size_factor + "px";
         values[k].style.backgroundColor = `hsl(${array[k]}, 100%, 50%)`;
       }
@@ -137,10 +154,10 @@ async function change_value_color(array, i, color) {
     }
   }
   switch (visualization) {
-    case 1 || 2:
+    case 1: case 2: case 4:
       values[i].style.backgroundColor = color;
       break;
-    case 3:
+    case 3: case 5:
       if (color != "white") {
         values[i].style.backgroundColor = "white";
       } else if (color == "white") {
@@ -157,209 +174,19 @@ async function change_value_color(array, i, color) {
 
 function change_value_height(i, height) {
   var values = document.getElementsByClassName("value");
-  if (visualization == 1) { values[i].style.height = height * size_factor + "px"; }
-  else if (visualization == 2) { values[i].style.marginTop = height * size_factor + "px"; } 
-  else if (visualization == 3) {
-    values[i].style.height = height * size_factor + "px";
-    values[i].style.backgroundColor = `hsl(${height}, 100%, 50%)`;
-  }
+  // if (visualization == 1) { values[i].style.height = height * size_factor + "px"; }
+  // else if (visualization == 2) { values[i].style.marginTop = height * size_factor + "px"; } 
+  // else if (visualization == 3) {
+  //   values[i].style.height = height * size_factor + "px";
+  //   values[i].style.backgroundColor = `hsl(${height}, 100%, 50%)`;
+  // }
   switch (visualization) {
-    case 1: values[i].style.height = height * size_factor + "px"; break;
+    case 1: case 4: values[i].style.height = height * size_factor + "px"; break;
     case 2: values[i].style.marginTop = height * size_factor + "px"; break;
-    case 3:
+    case 3: case 5:
       values[i].style.height = height * size_factor + "px";
       values[i].style.backgroundColor = `hsl(${height}, 100%, 50%)`;
       break;
     default: break;
   }
-}
-
-async function partition(array, low, high, speed) {
-  var pivot = array[high];
-
-  var i = low - 1;
-
-  for (var j = low; j <= high - 1; j++) {
-    if (array[j] < pivot) {
-      i++;
-      await swap_value(array, i, j);
-      await swap(array, i, j);
-      await sleep(speed);
-    }
-    comparisons++;
-    await update_info_box();
-  }
-
-  await swap_value(array, i + 1, high);
-  await swap(array, i + 1, high);
-  await sleep(speed);
-  return i + 1;
-}
-
-async function merge(array, left, mid, right, speed) {
-  var n1 = mid - left + 1;
-  var n2 = right - mid;
-
-  var L = new Array(n1);
-  var R = new Array(n2);
-
-  for (var i = 0; i < n1; i++)
-    L[i] = array[left + i];
-  for (var j = 0; j < n2; j++)
-    R[j] = array[mid + 1 + j];
-
-  var i = 0;
-  var j = 0;
-  var k = left;
-
-  while (i < n1 && j < n2) {
-    if (L[i] <= R[j]) {
-      await change_value_height(k, L[i]);
-      await change_value_color(array, k, "red");
-      array[k] = L[i];
-      i++;
-      await sleep(speed);
-      await change_value_color(array, k, "white");
-    } else {
-      await change_value_height(k, R[j]);
-      await change_value_color(array, k, "blue");
-      array[k] = R[j];
-      j++;
-      await sleep(speed);
-      await change_value_color(array, k, "white");
-    }
-    comparisons++;
-    await update_info_box();
-    k++;
-  }
-
-  while (i < n1) {
-    await change_value_height(k, L[i]);
-    await change_value_color(array, k, "red");
-    array[k] = L[i];
-    i++;
-    await sleep(speed);
-    await change_value_color(array, k, "white");
-    k++;
-  }
-  comparisons++;
-  await update_info_box();
-
-  while (j < n2) {
-    await change_value_height(k, R[j]);
-    await change_value_color(array, k, "blue");
-    array[k] = R[j];
-    j++;
-    await sleep(speed);
-    await change_value_color(array, k, "white");
-    k++;
-  }
-  comparisons++;
-  await update_info_box();
-}
-
-async function heapify(array, N, i, speed) {
-  var largest = i;
-  var l = 2 * i + 1;
-  var r = 2 * i + 2;
-
-  if (l < N && array[l] > array[largest]) {
-    await change_value_color(array, l, "blue");
-    largest = l;
-    await sleep(speed);
-    await change_value_color(array, l, "white");
-  }
-  comparisons++;
-  await update_info_box();
-
-  if (r < N && array[r] > array[largest]) {
-    await change_value_color(array, r, "blue");
-    largest = r;
-    await sleep(speed);
-    await change_value_color(array, r, "white");
-  }
-  comparisons++;
-  await update_info_box();
-
-  if (largest != i) {
-    await swap_value(array, i, largest);
-    await swap(array, i, largest);
-    await sleep(speed);
-    await heapify(array, N, largest, speed);
-  }
-}
-
-async function flip(array, i, speed) {
-  var temp, start = 0;
-  while (start < i) {
-    await swap_value(array, start, i);
-    await swap(array, start, i);
-    start++;
-    i--;
-    await sleep(speed);
-  }
-}
-
-async function bitonic_merge(array, low, center, direction, speed) {
-  if (center > 1) {
-    var k = await greatest_power_of_two_less_than(center);
-
-    for (let i = low; i < low + center - k; i++) {
-      if ((array[i] > array[i+k] && direction === true) || 
-        (array[i] < array[i+k] && direction === false)) {
-        await swap_value(array, i, i+k);
-        await swap(array, i, i+k);
-        await sleep(speed);
-      }
-    }
-
-    await bitonic_merge(array, low, k, direction, speed);
-    await bitonic_merge(array, low + k, center - k, direction, speed);
-  }
-}
-
-function find_max(array, n) {
-  var mi, i;
-  for (mi = 0, i = 0; i < n; i++) {
-    if (array[i] > array[mi])
-      mi = i;
-    comparisons++;
-    update_info_box();
-  }
-
-  return mi;
-}
-
-function update_info_box() {
-  document.getElementById("comparisons").innerText = comparisons;
-  document.getElementById("swaps").innerText = swaps;
-}
-
-function is_sorted(array) {
-  for (var i = 1; i < array.length; i++)
-    if (array[i] < array[i-1])
-      comparisons++;
-      update_info_box();
-      return false;
-  return true;
-}
-
-function min_run_length(n)
-{
-    
-    var r = 0;
-    while (n >= MIN_MERGE)
-    {
-        r |= (n & 1);
-        n >>= 1;
-    }
-    return n + r + 1;
-}
-
-function greatest_power_of_two_less_than(n) {
-  var k = 1;
-  while (k > 0 && k < n) {
-    k = k << 1;
-  }
-  return k >> 1;
 }
