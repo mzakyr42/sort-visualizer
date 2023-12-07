@@ -19,7 +19,7 @@ sorting algorithm that have been implemented are:
 8. Shell Sort
 9. Merge Sort
 10. Stooge Sort
-11. Heap Sort
+11. Max Heap Sort
 12. Pancake Sort
 13. Bogo Sort
 14. Gnome Sort
@@ -37,3 +37,9 @@ sorting algorithm that have been implemented are:
 26. Weave Sort Recursive
 27. Weave Sort Iterative
 28. Stalin Sort
+29. Pairwise Sorting Network Recursive
+30. Pairwise Sorting Network Iterative
+31. Bozo Sort
+32. Odd-Even Merge Sort Recursive
+33. Odd-Even Merge Sort Iterative
+34. Min Heap Sort

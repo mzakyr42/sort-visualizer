@@ -29,7 +29,8 @@
           </optgroup>
           <optgroup label="Selection Sorts">
             <option value="4">Selection Sort</option>
-            <option value="11">Heap Sort</option>
+            <option value="11">Max Heap Sort</option>
+            <option value="34">Min Heap Sort</option>
             <option value="17">Cycle Sort</option>
           </optgroup>
           <optgroup label="Insertion Sorts">
@@ -37,21 +38,25 @@
             <option value="8">Shell Sort</option>
           </optgroup>
           <optgroup label="Merge Sorts">
-            <option value="9">Merge Sort</option>
+            <option value="9">TD Merge Sort</option>
           </optgroup>
           <optgroup label="Distribution Sorts">
             <option value="18">Counting Sort</option>
             <option value="19">Radix Sort</option>
           </optgroup>
           <optgroup label="Concurrent Sorts">
-            <option value="16">Bitonic Sort Recursive</option>
-            <option value="20">Diamond Sort Recursive</option>
-            <option value="22">Bitonic Sort Iterative</option>
-            <option value="23">Diamond Sort Iterative</option>
+            <option value="16">Bitonic Sort R</option>
+            <option value="20">Diamond Sort R</option>
+            <option value="22">Bitonic Sort I</option>
+            <option value="23">Diamond Sort I</option>
             <option value="24">Crease Sort</option>
             <option value="25">Fold Sort</option>
-            <option value="26">Weave Sort Recursive</option>
-            <option value="27">Weave Sort Iterative</option>
+            <option value="26">Weave Sort R</option>
+            <option value="27">Weave Sort I</option>
+            <option value="29">Pairwise Sorting network R</option>
+            <option value="30">Pairwise Sorting network I</option>
+            <option value="32">OE Merge Sort R</option>
+            <option value="33">OE Merge Sort I</option>
           </optgroup>
           <optgroup label="Hybrid Sorts">
             <option value="15">Tim Sort</option>
@@ -60,6 +65,7 @@
             <option value="10">Stooge Sort</option>
             <option value="13">Bogo Sort</option>
             <option value="28">Stalin Sort</option>
+            <option value="31">Bozo Sort</option>
           </optgroup>
           <optgroup label="Other Sorts">
             <option value="12">Pancake Sort</option>
@@ -119,9 +125,10 @@
         </select>
       </div>
     </div>
-    <span>if you are using 1,024, please keep the volume 50% or lower if you don't want your ears broken</span>
+    <span>selection sort audio is super low, min heap sort visualization is weird</span>
 
     <script src="scripts/helper.js"></script>
+    <script src="scripts/utils.js"></script>
     <script src="scripts/sorting_algorithms.js"></script>
     <script src="scripts/app.js"></script>
   </body>

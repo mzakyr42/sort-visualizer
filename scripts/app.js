@@ -17,12 +17,10 @@ let visualization = 1;
 // 3. colorfull lines/hsl lines
 
 var values = 128;
-var comparisons = 0;
-var swaps = 0;
 var array = new Array(values);
 
 let size_factor;
-if (values <= 8) {
+if (values < 8) {
   size_factor = 100;
 } else if (values > 8 && values <= 128) {
   size_factor = 3.8;
@@ -43,7 +41,7 @@ size_menu.addEventListener("change", function () {
   values = Number(document.querySelector(".size-menu").value);
   array = new Array(values);
   max = Math.max(...array);
-  if (values <= 8) {
+  if (values < 8) {
     size_factor = 100;
   } else if (values > 8 && values <= 128) {
     size_factor = 3.8;
@@ -65,16 +63,15 @@ visualizer_menu.addEventListener("change", function () {
 
 randomize_btn.addEventListener("click", function () {
   var speed = Number(document.querySelector(".speed-menu").value);
-  comparisons = 0;
-  swaps = 0;
 
   randomize_array(array, speed);
   render_values(array);
 });
 
 reverse_btn.addEventListener("click", function () {
-  array.reverse();
-  render_values(array);
+  var speed = Number(document.querySelector(".speed-menu").value);
+
+  reverse_array(array, speed);
 })
 
 sort_btn.addEventListener("click", async function () {
@@ -140,6 +137,12 @@ sort_btn.addEventListener("click", async function () {
     case 26: await WeaveSortRecursive(array, speed); break;
     case 27: await WeaveSortIterative(array, speed); break;
     case 28: await StalinSort(array, speed); break;
+    case 29: await PairwiseSortRecursive(array, 0, array.length, 1, speed); break;
+    case 30: await PairwiseSortIterative(array, speed); break;
+    case 31: await BozoSort(array, speed); break;
+    case 32: await OddEvenMergeSortRecursive(array, 0, array.length, speed); break;
+    case 33: await OddEvenMergeSortIterative(array, speed); break;
+    case 34: await MinHeapSort(array, speed); break;
     default: console.log('how do we get here?'); break;
   }
 });
