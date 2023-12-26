@@ -34,22 +34,6 @@ button {
   padding: 20px 0px;
 }
 
-.info-box {
-    position: fixed;
-    top: 0;
-    right: 0;
-    background-color: #f1f1f1;
-    padding: 0px;
-}
-
-.info-box h2 {
-    margin-top: 0;
-}
-
-.info-box p {
-    margin: 0px 0;
-}
-
 .value_container {
   display: flex;
   flex-direction: row;

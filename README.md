@@ -14,12 +14,12 @@ sorting algorithm that have been implemented are:
 3. Quick Sort
 4. Selection Sort
 5. Cocktail Shaker Sort
-6. Odd-Even Sort
+6. Odd Even Sort
 7. Comb Sort
 8. Shell Sort
 9. Merge Sort
 10. Stooge Sort
-11. Max Heap Sort
+11. Heap Sort
 12. Pancake Sort
 13. Bogo Sort
 14. Gnome Sort
@@ -40,6 +40,14 @@ sorting algorithm that have been implemented are:
 29. Pairwise Sorting Network Recursive
 30. Pairwise Sorting Network Iterative
 31. Bozo Sort
-32. Odd-Even Merge Sort Recursive
+32. Odd-Even Merge Sort Rescursive
 33. Odd-Even Merge Sort Iterative
-34. Min Heap Sort
+34. Min Heap sort
+35. Simple Sort (polylog)
+36. Quick Sort Parallel
+37. Merge Sort Parallel
+38. Bitonic Sort Parallel
+39. Odd-Even Merge Sort Parallel
+40. Pairwise Sorting Network Parallel
+41. Merge Sort Iterative
+42. Merge Sort In-Place

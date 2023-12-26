@@ -365,7 +365,7 @@ async function CountingSort(array, k, exp, speed, n=array.length) {
 
 async function RadixSort(array, speed, n=array.length) {
   let m = Math.max(...array);
-  let base = 9;
+  let base = 10-1;
 
   for (let exp = 1; Math.floor(m / exp) > 0; exp *= base+1) {
     await CountingSort(array, base, exp, speed);
@@ -695,4 +695,131 @@ async function MinHeapSort(array, speed, low=0, high=array.length) {
   }
 
   await reverse_array(array, speed);
+}
+
+// from polylog
+// https://www.youtube.com/watch?v=_W0yUJlscRA
+async function SimpleSort(array, speed, n=array.length) {
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (array[i] < array[j]) {
+        await swap_value(array, i, j);
+        await swap(array, i, j);
+        await sleep(speed);
+      }
+    }
+  }
+}
+
+async function QuickSortParallel(array, low, high, speed) {
+  if (low < high) {
+    var piv = await partition(array, low, high, speed);
+
+    await Promise.all([
+      QuickSortParallel(array, low, piv - 1, speed),
+      QuickSortParallel(array, piv + 1, high, speed)
+    ]);
+  }
+}
+
+async function MergeSortParallel(array, left, right, speed) {
+  if (left < right) {
+    var mid = parseInt((left + right) >> 1);
+    await Promise.all([
+      MergeSortParallel(array, left, mid, speed),
+      MergeSortParallel(array, mid+1, right, speed)
+    ]);
+    await merge(array, left, mid, right, speed);
+  }
+}
+
+async function BitonicSortParallel(array, low, center, direction, speed) {
+  if (center > 1) {
+    var k = await greatest_power_of_two_less_than(center);
+    await Promise.all([
+      BitonicSortParallel(array, low, k, !direction, speed),
+      BitonicSortParallel(array, low + k, center - k, direction, speed)
+    ]);
+    await bitonic_merge(array, low, center, direction, speed);
+  }
+}
+
+async function OddEvenMergeSortParallel(array, low, n, speed) {
+  if (n > 1) {
+    let m = parseInt(n/2);
+    await Promise.all([
+      OddEvenMergeSortParallel(array, low, m),
+      OddEvenMergeSortParallel(array, low + m, n - m)
+    ]);
+    await odd_even_merge(array, low, m, n, 1, speed);
+  }
+}
+
+async function PairwiseSortParallel(array, start, end, gap, speed) {
+  if (start == end - gap) {
+    return;
+  }
+
+  var b;
+  for (b = start + gap; b < end; b += 2 * gap) {
+    if (array[b - gap] > array[b]) {
+      await swap_value(array, b - gap, b);
+      await swap(array, b - gap, b);
+      await sleep(speed);
+    }
+  }
+
+  if (Math.floor((end - start) / gap) % 2 == 0) {
+    await Promise.all([
+      PairwiseSortParallel(array, start, end, gap * 2, speed),
+      PairwiseSortParallel(array, start + gap, end + gap, gap * 2)
+    ]);
+  } else {
+    await Promise.all([
+      PairwiseSortParallel(array, start + gap, end, gap * 2, speed),
+      PairwiseSortParallel(array, start, end + gap, gap * 2, speed)
+    ]);
+  }
+
+  var a;
+  for (a = 1; a < Math.floor((end - start) / gap); a = (a * 2) + 1);
+
+  var b;
+  for (b = start + gap; b + gap < end; b += 2 * gap) {
+    var c = a;
+    while (c > 1) {
+      c = Math.floor(c / 2);
+
+      if (b + (c * gap) < end) {
+        if (array[b] > array[b + (c * gap)]) {
+          await swap_value(array, b, b + (c * gap));
+          await swap(array, b, b + (c * gap));
+          await sleep(speed);
+        }
+      }
+    }
+  }
+}
+
+async function MergeSortIterative(array, speed, n=array.length) {
+  var current_size
+  var left_start;
+
+  for (current_size = 1; current_size <= n - 1; current_size = 2 * current_size) {
+    for (left_start = 0; left_start < n - 1; left_start += 2 * current_size) {
+      var mid = Math.min(left_start + current_size - 1, n - 1);
+      var right_end = Math.min(left_start + 2 * current_size - 1, n - 1);
+      await merge(array, left_start, mid, right_end, speed);
+    }
+  }
+}
+
+async function MergeSortInPlace(array, low, high, speed) {
+  if (low < high) {
+    let mid = parseInt((low + high) >> 1);
+
+    await MergeSortInPlace(array, low, mid, speed);
+    await MergeSortInPlace(array, mid+1, high, speed);
+    await merge_in_place(array, low, mid, high, speed);
+  }
 }

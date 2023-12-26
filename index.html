@@ -16,11 +16,11 @@
         <button id="randomize_btn">Randomize Array</button>
         <button id="sort_btn">Sort</button>
         <button id="initialize_btn">init</button>
-        <span>sorting algorithm:</span>
         <select name="sorting algorithm" class="algo-menu">
           <optgroup label="Exchange Sorts">
             <option value="1" selected>Bubble Sort</option>
             <option value="3">Quick Sort</option>
+            <option value="36">Quick Sort Parallel</option>
             <option value="5">Cocktail Shaker Sort</option>
             <option value="6">Odd-Even Sort</option>
             <option value="7">Comb Sort</option>
@@ -38,25 +38,31 @@
             <option value="8">Shell Sort</option>
           </optgroup>
           <optgroup label="Merge Sorts">
-            <option value="9">TD Merge Sort</option>
+            <option value="9">Merge Sort Recursive</option>
+            <option value="41">Merge Sort Iterative</option>
+            <option value="37">Merge Sort Parallel</option>
+            <option value="42">Merge Sort In-Place</option>
           </optgroup>
           <optgroup label="Distribution Sorts">
             <option value="18">Counting Sort</option>
             <option value="19">Radix Sort</option>
           </optgroup>
           <optgroup label="Concurrent Sorts">
-            <option value="16">Bitonic Sort R</option>
-            <option value="20">Diamond Sort R</option>
-            <option value="22">Bitonic Sort I</option>
+            <option value="16">Bitonic Sort Recursive</option>
+            <option value="22">Bitonic Sort Iterative</option>
+            <option value="38">Bitonic Sort Parallel</option>
+            <option value="20">Diamond Sort Rescursive</option>
             <option value="23">Diamond Sort I</option>
             <option value="24">Crease Sort</option>
             <option value="25">Fold Sort</option>
-            <option value="26">Weave Sort R</option>
-            <option value="27">Weave Sort I</option>
-            <option value="29">Pairwise Sorting network R</option>
-            <option value="30">Pairwise Sorting network I</option>
-            <option value="32">OE Merge Sort R</option>
-            <option value="33">OE Merge Sort I</option>
+            <option value="26">Weave Sort Recusrive</option>
+            <option value="27">Weave Sort Iterative</option>
+            <option value="29">Pairwise Sorting Network Recursive</option>
+            <option value="30">Pairwise Sorting Network Iterative</option>
+            <option value="40">Pairwise Sorting Network Parallel</option>
+            <option value="32">Odd-Even Merge Sort Rescursive</option>
+            <option value="33">Odd-Even Merge Sort Iterative</option>
+            <option value="39">Odd-Even Merge Sort Parallel</option>
           </optgroup>
           <optgroup label="Hybrid Sorts">
             <option value="15">Tim Sort</option>
@@ -69,9 +75,9 @@
           </optgroup>
           <optgroup label="Other Sorts">
             <option value="12">Pancake Sort</option>
+            <option value="35">Simple Sort (polylog)</option>
           </optgroup>
         </select>
-        <span>size:</span>
         <select name="amount of values" class="size-menu">
           <option value="2">2</option>
           <option value="4">4</option>
@@ -84,7 +90,6 @@
           <option value="512">512</option>
           <option value="1024">1,024</option>
         </select>
-        <span>speed:</span>
         <select name="speed (in ms)" class="speed-menu">
           <option value="1">1 ms</option>
           <option value="5">5 ms</option>
@@ -115,7 +120,6 @@
         <!--   <option value="9">times 9</option> -->
         <!--   <option value="10" selected>times 10</option> -->
         <!-- </select> -->
-        <span>visualizer:</span>
         <select name="values visualization" class="visualizer-menu">
           <option value="1" selected>lines</option>
           <option value="2">points</option>
@@ -125,7 +129,7 @@
         </select>
       </div>
     </div>
-    <span>selection sort audio is super low, min heap sort visualization is weird</span>
+    <span>selection sort audio is super loud, min heap sort visualization is weird</span>
 
     <script src="scripts/helper.js"></script>
     <script src="scripts/utils.js"></script>

@@ -42,9 +42,15 @@ function sleep(ms) {
 }
 
 function initialize() {
+  // let n = values - 1;
+  // let c = 2 * Math.PI / n;
+  let mid = (values - 1) / 2;
   for (var i = 0; i < values; i++) {
     // array[i] = random_number(min_index, max_index);
     // array[i] = Math.round((i+1) / 10) * 10;
+    // array[i] = parseInt(Math.pow(i+1, 2) / values);
+    // array[i] = parseInt(n * Math.sin(c * i)+1) / 2;
+    // array[i] = parseInt((Math.pow(i-mid, 5) / Math.pow(mid, 4)) + mid;
     array[i] = i+1;
   }
 }

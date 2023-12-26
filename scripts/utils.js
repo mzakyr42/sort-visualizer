@@ -299,3 +299,22 @@ async function reverse_array(array, speed) {
     await sleep(speed);
   }
 }
+
+async function merge_in_place(array, low, mid, high, speed) {
+  let i = low;
+  while (i <= mid) {
+    if (array[i] > array[mid+1]) {
+      await swap_value(array, i, mid+1);
+      await swap(array, i, mid+1);
+      await sleep(speed);
+      for (let j = mid + 1; j < high; j++) {
+        if (array[j] > array[j+1]) {
+          await swap_value(array, j, j+1);
+          await swap(array, j, j+1);
+          await sleep(speed);
+        }
+      }
+    }
+    i++;
+  }
+}

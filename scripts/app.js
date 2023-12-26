@@ -143,6 +143,14 @@ sort_btn.addEventListener("click", async function () {
     case 32: await OddEvenMergeSortRecursive(array, 0, array.length, speed); break;
     case 33: await OddEvenMergeSortIterative(array, speed); break;
     case 34: await MinHeapSort(array, speed); break;
+    case 35: await SimpleSort(array, speed); break;
+    case 36: await QuickSortParallel(array, 0, array.length - 1, speed); break;
+    case 37: await MergeSortParallel(array, 0, array.length - 1, speed); break;
+    case 38: await BitonicSortParallel(array, 0, array.length, true, speed); break;
+    case 39: await OddEvenMergeSortParallel(array, 0, array.length, speed); break;
+    case 40: await PairwiseSortParallel(array, 0, array.length, 1, speed); break;
+    case 41: await MergeSortIterative(array, speed); break;
+    case 42: await MergeSortInPlace(array, 0, array.length - 1, speed); break;
     default: console.log('how do we get here?'); break;
   }
 });
