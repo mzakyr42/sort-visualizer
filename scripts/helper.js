@@ -36,11 +36,28 @@ function play_sound(freq) {
 function random_number(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+      async function sleep(ms) {
+        if (ms > 10) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        } else {
+          return new Promise((resolve) => {
+            const start = performance.now();
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+            const channel = new MessageChannel();
+            const port = channel.port2;
+            channel.port1.onmessage = () => {
+              const now = performance.now();
+              if (now - start >= ms) {
+                resolve();
+              } else {
+                port.postMessage(null);
+              }
+            };
 
+            port.postMessage(null);
+          });
+        }
+      }
 function initialize() {
   // let n = values - 1;
   // let c = 2 * Math.PI / n;
