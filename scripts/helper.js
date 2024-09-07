@@ -16,10 +16,10 @@ function play_sound(freq) {
     )();
   }
   const oscillator = audio_ctx.createOscillator();
-  oscillator.type = "square";
+  oscillator.type = "triangle";
   oscillator.frequency.value=freq;
   const node = audio_ctx.createGain();
-  node.gain.value = 0.005;
+  node.gain.value = 0.03;
   node.gain.linearRampToValueAtTime(
     0, audio_ctx.currentTime + 0.1
   );
